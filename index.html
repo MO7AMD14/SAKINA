@@ -124,6 +124,24 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
  .themeTop{top:.6rem;left:.6rem}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* SAKINA: الشروح والقارئ الصوتي */
+.explain-panel{border:1px solid var(--bd);border-radius:18px;background:var(--card);padding:1rem;margin:.8rem 0;box-shadow:var(--sh)}
+.explain-tabs{display:flex;gap:.45rem;flex-wrap:wrap;margin:.7rem 0}
+.explain-tabs button{background:var(--card);border:1px solid var(--bd);color:var(--tx);padding:.4rem .75rem}
+.explain-tabs button.on{background:linear-gradient(135deg,var(--lap),var(--pri));color:#fff}
+.explain-body{white-space:normal;line-height:2.1;overflow-wrap:anywhere}
+.explain-body p{margin:.45rem 0}
+.explain-tools{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.speech-panel{border:1px solid var(--bd);border-radius:16px;padding:.8rem;margin:.7rem 0;background:var(--card)}
+.speech-panel .grid{gap:.6rem}.speech-panel label{font-size:.9rem}
+.speech-panel input[type=range]{margin:.1rem 0 .4rem}
+.tts-playing{border-color:var(--au)!important;background:rgba(236,188,88,.13)!important;box-shadow:0 0 0 2px rgba(236,188,88,.12)}
+.tts-controls{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.65rem}
+.tts-controls button{padding:.4rem .7rem}
+.explain-muted{color:var(--mu);padding:.8rem;border:1px dashed var(--bd);border-radius:12px}
+@media(max-width:600px){.speech-panel{padding:.65rem}.speech-panel .grid{grid-template-columns:1fr 1fr}.explain-panel{padding:.8rem}}
+
 </style>
 </head>
 <body>
@@ -223,6 +241,14 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
   </div>
   <div class="card page"><h3 id="sTitle" style="text-align:center;font-size:1.7rem">اختر سورة</h3><div class="mu" id="sMeta" style="text-align:center"></div><div id="bsm" class="bsm"></div><div id="qBox" class="quran"></div>
     <div class="row" style="margin-top:1rem"><button id="sDone" class="gold">أتممت السورة</button><button id="prevS" class="alt">السورة السابقة</button><button id="nextS" class="alt">السورة التالية</button></div></div>
+
+  <div id="tafsirPanel" class="explain-panel hide">
+    <div class="row" style="justify-content:space-between"><h3 id="tafTitle">تفسير الآية</h3><button id="tafClose" class="alt">إغلاق</button></div>
+    <div class="row"><label style="flex:1">كتاب التفسير<select id="tafSource"><option value="">جارٍ تحميل مصادر التفسير…</option></select></label></div>
+    <div class="explain-tabs" id="tafTabs"><button class="on" data-taf-tab="tafsir">التفسير المنقول</button><button data-taf-tab="words">الكلمات</button><button data-taf-tab="reason">سبب النزول</button><button data-taf-tab="source">المصدر</button></div>
+    <div class="explain-body" id="tafBody"><p class="explain-muted">اختر آية لعرض تفسيرها من مصدر متاح.</p></div>
+    <div class="explain-tools"><button id="tafPrev" class="alt">الآية السابقة</button><button id="tafNext" class="alt">الآية التالية</button><button id="tafCopy" class="alt">نسخ التفسير</button><button id="tafShare" class="alt">مشاركة</button></div>
+  </div>
 </section>
 <div id="abar"><button id="aPlay">استماع</button><button id="aImg" class="gold">حفظ صورة</button><button id="aHere" class="alt">وصلت هنا</button><button id="aFav" class="alt">مفضلة</button><button id="aCopy" class="alt">نسخ</button><button id="aShare" class="alt">مشاركة</button></div>
 
@@ -231,12 +257,14 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
 <section id="adhkar" class="pg hide">
   <h2>الأذكار والأدعية</h2>
   <div class="card"><input id="azFind" placeholder="ابحث في الأقسام: أذكار الصباح، النوم، الاستيقاظ…"><div class="plist" id="azCats"></div><p class="mu">النصوص من كتاب «حصن المسلم» عبر مصدر مفتوح على الإنترنت. اضغط على العدّاد في كل ذكر لتعدّ التكرار.</p></div>
+  <div id="azAudioControls" class="speech-panel"></div>
   <div id="azBox"></div>
 </section>
 
 <section id="hadith" class="pg hide">
   <h2>الأحاديث النبوية</h2>
   <div class="card"><h3>الأربعون النووية</h3><input id="hdFind" placeholder="ابحث في الأحاديث بكلمة…"><div class="mu" id="hdInfo"></div></div>
+  <div id="hdAudioControls" class="speech-panel"></div>
   <div id="hdBox"></div>
 </section>
 
@@ -291,6 +319,7 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
 <section id="settings" class="pg hide">
   <h2>الإعدادات</h2>
   <div class="card"><h3>المظهر</h3><button class="alt thBtn"></button></div>
+  <div class="card"><h3>إعدادات القارئ الصوتي</h3><p class="mu">الأصوات هنا أصوات آلية يوفرها جهازك أو متصفحك، وليست تسجيلات لقراء أو مشايخ.</p><label>الصوت العربي<select id="speechVoiceSetting"><option value="">الصوت الافتراضي للجهاز</option></select></label><div class="grid"><label>سرعة القراءة<input id="speechRateSetting" type="range" min="0.75" max="1.25" step="0.05" value="1"></label><label>درجة الصوت<input id="speechPitchSetting" type="range" min="0.75" max="1.25" step="0.05" value="1"></label></div></div>
   <div class="card"><h3>الحساب</h3><p dir="ltr" id="sMail"></p><div class="row"><button id="chgPw" class="alt">إرسال رابط تغيير كلمة المرور</button><button id="out2" class="del">تسجيل الخروج</button></div></div>
 </section>
 </main>
@@ -385,15 +414,17 @@ async function boot(u){
   if(!s.exists()){S={theme:curTheme(),completed:[],method:'10',city:'Doha',country:'Qatar',vol:.7,adMode:'adhan',reciter:'ar.minshawi'};await safe(()=>set(uref,{...S,email:u.email,createdAt:Date.now()}))}else S=s.val();
   S.completed=S.completed||[];
   applyTheme(S.theme||curTheme());
+  SPEECH.voiceName=S.speechVoice||'';SPEECH.rate=S.speechRate||1;SPEECH.pitch=S.speechPitch||1;fillVoiceSelects();['az','hd'].forEach(k=>{if($(k+'Rate'))$(k+'Rate').value=S.speechRate||1;if($(k+'Pitch'))$(k+'Pitch').value=S.speechPitch||1;if($(k+'Voice'))$(k+'Voice').value=S.speechVoice||'';if($(k+'RateVal'))$(k+'RateVal').textContent=(S.speechRate||1)+'×';if($(k+'PitchVal'))$(k+'PitchVal').textContent=S.speechPitch||1});
   $('city').value=S.city||'Doha';$('country').value=S.country||'Qatar';$('method').value=S.method||'10';$('nOn').checked=!!S.notify;$('sMail').textContent=u.email;
   $('vol').value=S.vol??.7;$('adMode').value=S.adMode||'adhan';$('reciter').value=S.reciter||'ar.minshawi';
+  if($('speechRateSetting'))$('speechRateSetting').value=S.speechRate||1;if($('speechPitchSetting'))$('speechPitchSetting').value=S.speechPitch||1;
   const f=S.qfont||'Amiri Quran';$('qFont').value=f;document.documentElement.style.setProperty('--qfam',`'${f}'`);
   if(S.qsize){$('fs').value=S.qsize;document.documentElement.style.setProperty('--qf',S.qsize+'px')}
   initLists();show('app');go('dash');loadPrayer(true);
   items('dailyWird').then(x=>W=x).catch(()=>{});
 }
 const save=p=>{Object.assign(S,p);return safe(()=>update(uref,p))};
-function go(p){$$('.pg').forEach(x=>{const on=x.id===p;x.classList.toggle('hide',!on);x.classList.remove('in');if(on){void x.offsetWidth;x.classList.add('in')}});
+function go(p){if(p!=='adhkar'&&p!=='hadith')stopSpeech();if(p==='adhkar'||p==='hadith')fillVoiceSelects();$$('.pg').forEach(x=>{const on=x.id===p;x.classList.toggle('hide',!on);x.classList.remove('in');if(on){void x.offsetWidth;x.classList.add('in')}});
   $$('nav button[data-p],#bnav button[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p));drawer(false);$('abar').classList.remove('on');window.scrollTo({top:0});
   ({dash:renderDash,wird:renderWird,khatma:()=>{renderKPrev();renderKhatma()},hifz:renderHifz,stats:renderStats,cal:renderCal,fav:renderFav,goals:renderGoals,notes:renderNotes,adhkar:loadAdhkar,hadith:loadHadith,quran:()=>{if(!curN)openSurah(S.last?.s||1,S.last?.a)}})[p]?.()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b)go(b.dataset.p)});
@@ -550,7 +581,7 @@ $('fs').oninput=e=>document.documentElement.style.setProperty('--qf',e.target.va
 $('fs').onchange=e=>save({qsize:+e.target.value});
 $('qFont').onchange=e=>{document.documentElement.style.setProperty('--qfam',`'${e.target.value}'`);save({qfont:e.target.value})};
 $('reciter').onchange=e=>{save({reciter:e.target.value});if(!$('qa').paused)playAyah(selA)};
-$('qBox').onclick=e=>{const a=e.target.closest('span');if(!a)return;$$('#qBox .sel').forEach(x=>x.classList.remove('sel'));a.classList.add('sel');selA=+a.dataset.a;$('abar').classList.add('on')};
+$('qBox').onclick=e=>{const a=e.target.closest('span');if(!a)return;$$('#qBox .sel').forEach(x=>x.classList.remove('sel'));a.classList.add('sel');selA=+a.dataset.a;$('abar').classList.add('on');openTafsir(curN,selA)};
 $('aHere').onclick=()=>save({last:{s:curN,a:selA}}).then(()=>toast('تم حفظ موضعك: آية '+ar(selA)));
 $('aFav').onclick=()=>safe(()=>addTo('favorites',{s:curN,a:selA,text:curAy[selA-1],at:Date.now()}),'أُضيفت الآية إلى المفضلة');
 const aText=()=>`${curAy[selA-1]} ﴿${ar(selA)}﴾ [سورة ${NM[curN-1]}]`;
@@ -606,52 +637,151 @@ async function renderFav(){
   $$('#favList [data-fx]').forEach(b=>b.onclick=async()=>{await safe(()=>delFrom('favorites',b.dataset.fx),'تم الحذف');renderFav()});
 }
 
+/* ---------- الشروح والقارئ الصوتي ---------- */
+const SPEECH={kind:'',items:[],index:0,utterance:null,paused:false,voices:[],voiceName:'',rate:1,pitch:1,token:0};
+const hasSpeech=()=>('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
+function speechVoices(){
+  if(!hasSpeech())return [];
+  const all=speechSynthesis.getVoices()||[];
+  const arVoices=all.filter(v=>/^ar([_-]|$)/i.test(v.lang||''));
+  return arVoices.length?arVoices:all.filter(v=>/arab|العرب/i.test(v.name||''));
+}
+function fillVoiceSelects(){
+  SPEECH.voices=speechVoices();
+  ['speechVoiceSetting','azVoice','hdVoice'].forEach(id=>{const el=$(id);if(!el)return;const selected=S.speechVoice||SPEECH.voiceName||el.value;el.innerHTML='<option value="">الصوت الافتراضي للجهاز</option>'+SPEECH.voices.map((v,i)=>`<option value="${esc(v.name)}">${esc(v.name)} — ${esc(v.lang||'ar')}</option>`).join('');if(selected&&SPEECH.voices.some(v=>v.name===selected))el.value=selected;});
+}
+function speechControls(kind){
+ const id=kind==='az'?'az':'hd';
+ return `<div class="row" style="justify-content:space-between"><b>${kind==='az'?'قارئ الأذكار':'قارئ الأحاديث'}</b><span class="mu">صوت آلي من الجهاز</span></div>
+ <label>الصوت العربي<select id="${id}Voice"><option value="">الصوت الافتراضي للجهاز</option></select></label>
+ <div class="grid"><label>السرعة <span id="${id}RateVal">${S.speechRate||1}×</span><input id="${id}Rate" type="range" min="0.75" max="1.25" step="0.05" value="${S.speechRate||1}"></label><label>درجة الصوت <span id="${id}PitchVal">${S.speechPitch||1}</span><input id="${id}Pitch" type="range" min="0.75" max="1.25" step="0.05" value="${S.speechPitch||1}"></label></div>
+ <div class="tts-controls"><button data-tts-all="${kind}">تشغيل الكل بالترتيب</button><button class="alt" data-tts-pause>إيقاف مؤقت</button><button class="alt" data-tts-resume>استكمال</button><button class="alt" data-tts-stop>إيقاف نهائي</button><button class="alt" data-tts-replay>إعادة الحالي</button></div><p class="mu" id="${id}Status">جاهز للاستماع.</p>`;
+}
+function initSpeechControls(){
+ $('azAudioControls').innerHTML=speechControls('az');$('hdAudioControls').innerHTML=speechControls('hd');fillVoiceSelects();
+ ['az','hd'].forEach(k=>{
+  const v=$(k+'Voice'),r=$(k+'Rate'),p=$(k+'Pitch');
+  v.onchange=()=>{SPEECH.voiceName=v.value;save({speechVoice:v.value})};
+  r.oninput=()=>{$(k+'RateVal').textContent=(+r.value).toFixed(2)+'×';SPEECH.rate=+r.value};
+  r.onchange=()=>save({speechRate:+r.value});
+  p.oninput=()=>{$(k+'PitchVal').textContent=(+p.value).toFixed(2);SPEECH.pitch=+p.value};
+  p.onchange=()=>save({speechPitch:+p.value});
+ });
+ const vs=$('speechVoiceSetting');if(vs){vs.onchange=()=>{SPEECH.voiceName=vs.value;save({speechVoice:vs.value});['azVoice','hdVoice'].forEach(id=>{if($(id))$(id).value=vs.value})};$('speechRateSetting').oninput=e=>{SPEECH.rate=+e.target.value;['azRate','hdRate'].forEach(id=>{if($(id))$(id).value=e.target.value})};$('speechRateSetting').onchange=e=>save({speechRate:+e.target.value});$('speechPitchSetting').oninput=e=>{SPEECH.pitch=+e.target.value;['azPitch','hdPitch'].forEach(id=>{if($(id))$(id).value=e.target.value})};$('speechPitchSetting').onchange=e=>save({speechPitch:+e.target.value})}
+}
+function markSpeech(){
+ $$('.tts-playing').forEach(x=>x.classList.remove('tts-playing'));
+ if(SPEECH.kind&&SPEECH.items[SPEECH.index]){const item=SPEECH.items[SPEECH.index];const el=document.querySelector(`[data-tts-card="${SPEECH.kind}-${CSS.escape(String(item.id))}"]`);if(el){el.classList.add('tts-playing');el.scrollIntoView({block:'nearest',behavior:'smooth'})}}
+ const st=$(SPEECH.kind==='az'?'azStatus':'hdStatus');if(st)st.textContent=SPEECH.items.length?`يُقرأ ${SPEECH.index+1} من ${SPEECH.items.length}`:'جاهز للاستماع.';
+}
+function stopSpeech(){
+ SPEECH.token++;if(hasSpeech())speechSynthesis.cancel();SPEECH.kind='';SPEECH.items=[];SPEECH.index=0;SPEECH.utterance=null;SPEECH.paused=false;
+ $$('.tts-playing').forEach(x=>x.classList.remove('tts-playing'));['azStatus','hdStatus'].forEach(id=>{if($(id))$(id).textContent='تم إيقاف القراءة.'});
+}
+function speakQueue(kind,items,index=0){
+ if(!hasSpeech())return toast('ميزة القراءة الصوتية غير مدعومة في هذا المتصفح',1);
+ if(!items.length)return toast('لا يوجد نص متاح للاستماع',1);
+ speechSynthesis.cancel();SPEECH.token++;SPEECH.kind=kind;SPEECH.items=items;SPEECH.index=index;SPEECH.paused=false;
+ const id=kind==='az'?'az':'hd',v=$(id+'Voice');SPEECH.voiceName=v?.value||S.speechVoice||'';SPEECH.rate=+( $(id+'Rate')?.value||S.speechRate||1);SPEECH.pitch=+( $(id+'Pitch')?.value||S.speechPitch||1);
+ speakCurrent(SPEECH.token);
+}
+function speakCurrent(token){
+ if(token!==SPEECH.token||!SPEECH.items[SPEECH.index]){stopSpeech();return}
+ const item=SPEECH.items[SPEECH.index],u=new SpeechSynthesisUtterance(item.text);SPEECH.utterance=u;u.lang='ar';u.rate=SPEECH.rate||1;u.pitch=SPEECH.pitch||1;
+ const voice=SPEECH.voices.find(v=>v.name===SPEECH.voiceName);if(voice)u.voice=voice;
+ u.onstart=()=>{if(token===SPEECH.token)markSpeech()};
+ u.onend=()=>{if(token!==SPEECH.token)return;SPEECH.index++;if(SPEECH.index<SPEECH.items.length){markSpeech();speakCurrent(token)}else{const kind=SPEECH.kind;stopSpeech();const st=$(kind==='az'?'azStatus':'hdStatus');if(st)st.textContent='اكتملت القراءة.'}};
+ u.onerror=e=>{if(token!==SPEECH.token)return;stopSpeech();toast('تعذّرت قراءة النص على هذا الجهاز'+(e.error?' ('+e.error+')':''),1)};
+ try{speechSynthesis.speak(u)}catch(e){stopSpeech();toast('تعذّر بدء القراءة الصوتية',1)}
+}
+function speakSingle(kind,items,index){if(index>=0&&items[index])speakQueue(kind,[items[index]],0)}
+function attachSpeechButtons(){
+ $$('[data-speak-kind]').forEach(b=>b.onclick=()=>{const kind=b.dataset.speakKind;let list=[];if(kind==='az'){const ci=+$('azBox').dataset.cat;const c=AZ?.[ci];list=(c?.a||[]).map((x,i)=>({id:i,text:x.x}))}else list=(HD||[]).filter(h=>!$('hdFind').value.trim()||plain(h.text).includes(plain($('hdFind').value.trim()))).map(h=>({id:h.hadithnumber,text:h.text}));const index=list.findIndex(x=>String(x.id)===b.dataset.speakId);if(index>=0)speakSingle(kind,list,index)});
+}
+document.addEventListener('click',e=>{
+ const all=e.target.closest('[data-tts-all]');if(all){const k=all.dataset.ttsAll;let list=[];if(k==='az'){const c=AZ?.[+$('azBox').dataset.cat];list=(c?.a||[]).map((x,i)=>({id:i,text:x.x}))}else list=(HD||[]).filter(h=>!$('hdFind').value.trim()||plain(h.text).includes(plain($('hdFind').value.trim()))).map(h=>({id:h.hadithnumber,text:h.text}));speakQueue(k,list);}
+ if(e.target.closest('[data-tts-pause]')){if(hasSpeech()&&speechSynthesis.speaking){speechSynthesis.pause();SPEECH.paused=true}}
+ if(e.target.closest('[data-tts-resume]')){if(hasSpeech()&&SPEECH.paused){speechSynthesis.resume();SPEECH.paused=false}}
+ if(e.target.closest('[data-tts-stop]'))stopSpeech();
+ if(e.target.closest('[data-tts-replay]')){if(SPEECH.items[SPEECH.index])speakQueue(SPEECH.kind,[SPEECH.items[SPEECH.index]],0)}
+});
+if(hasSpeech()){speechSynthesis.onvoiceschanged=fillVoiceSelects;setTimeout(fillVoiceSelects,400)}
+
+/* ---------- نافذة شرح موثّق للأحاديث والأذكار ---------- */
+function showVerifiedInfo(type,title,text,source){
+ const old=$('verifiedInfo');if(old)old.remove();const d=document.createElement('div');d.id='verifiedInfo';d.className='explain-panel';
+ const isHadith=type==='hadith';d.innerHTML=`<div class="row" style="justify-content:space-between"><h3>${isHadith?'شرح الحديث':'معنى الذكر وفضله'}</h3><button class="alt" id="verifiedClose">إغلاق</button></div><b>${esc(title)}</b><div class="explain-tabs"><button class="on" data-vtab="meaning">المعنى والشرح</button><button data-vtab="words">الكلمات</button><button data-vtab="benefits">الفوائد</button><button data-vtab="source">المصدر</button></div><div class="explain-body" id="verifiedBody"><p class="explain-muted">الشرح الموثّق غير متوفر حاليًا لهذا النص. لم نُنشئ شرحًا من عندنا ولم ننسب قولًا إلى عالم دون مرجع.</p></div><div class="explain-tools"><button id="verifiedCopy" class="alt">نسخ النص</button><button id="verifiedShare" class="alt">مشاركة النص</button></div>`;
+ const host=isHadith?$('hdBox'): $('azBox');host.prepend(d);
+ const setTab=t=>{d.querySelectorAll('[data-vtab]').forEach(b=>b.classList.toggle('on',b.dataset.vtab===t));const body=$('verifiedBody');if(t==='source')body.innerHTML=`<p>مصدر النص المعروض: ${esc(source|| (isHadith?'الأربعون النووية عبر Hadith API':'مصدر الأذكار المحمّل داخل الموقع'))}.</p><p class="explain-muted">لا تتوفر لدينا حاليًا إحالة موثقة لشرح هذا النص أو درجة صحته التفصيلية.</p>`;else body.innerHTML='<p class="explain-muted">المعلومة الموثقة غير متوفرة لهذا النص حاليًا. لن نعرض معنى أو فائدة أو حكمًا غير مسند إلى مصدر.</p>'};
+ d.querySelectorAll('[data-vtab]').forEach(b=>b.onclick=()=>setTab(b.dataset.vtab));$('verifiedClose').onclick=()=>d.remove();$('verifiedCopy').onclick=()=>copyText(text);$('verifiedShare').onclick=()=>shareText(title+'\n'+text);
+}
+function copyText(t){if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1));else toast('النسخ غير مدعوم في هذا المتصفح',1)}
+function shareText(t){if(navigator.share)navigator.share({text:t}).catch(()=>{});else copyText(t)}
+
 /* ---------- الأذكار والأدعية (حصن المسلم) ---------- */
-let AZ=null;
+let AZ=null,AZ_CURRENT=-1;
 async function fetchJson(urls){for(const u of urls){try{const r=await fetch(u);if(r.ok)return await r.json()}catch(e){}}throw new Error('fail')}
 async function loadAdhkar(){
-  if(AZ)return drawAz('');
-  $('azCats').innerHTML='<span class="mu">جارٍ التحميل…</span>';
-  try{
-    try{AZ=JSON.parse(localStorage.getItem('sk_az'))}catch(e){}
-    if(!AZ||!AZ.length){const j=await fetchJson(['https://cdn.jsdelivr.net/gh/rn0x/Adhkar-json@main/adhkar.json','https://raw.githubusercontent.com/rn0x/Adhkar-json/main/adhkar.json']);
-      AZ=(Array.isArray(j)?j:Object.values(j)).map(c=>({t:c.category||c.title||c.name||'',a:(c.array||c.items||c.content||[]).map(i=>({x:i.text||i.content||i.zekr||'',n:+(i.count||i.repeat||1)||1})).filter(i=>i.x)})).filter(c=>c.t&&c.a.length);
-      if(!AZ.length)throw 0;try{localStorage.setItem('sk_az',JSON.stringify(AZ))}catch(e){}}
-    drawAz('');
-  }catch(e){$('azCats').innerHTML='<p>تعذّر تحميل الأذكار. تحقق من الاتصال.</p><button id="azRetry">إعادة المحاولة</button>';$('azRetry').onclick=loadAdhkar}
+ if(AZ)return drawAz('');$('azCats').innerHTML='<span class="mu">جارٍ التحميل…</span>';
+ try{try{AZ=JSON.parse(localStorage.getItem('sk_az'))}catch(e){}
+  if(!AZ||!AZ.length){const j=await fetchJson(['https://cdn.jsdelivr.net/gh/rn0x/Adhkar-json@main/adhkar.json','https://raw.githubusercontent.com/rn0x/Adhkar-json/main/adhkar.json']);AZ=(Array.isArray(j)?j:Object.values(j)).map(c=>({t:c.category||c.title||c.name||'',a:(c.array||c.items||c.content||[]).map(i=>({x:i.text||i.content||i.zekr||'',n:+(i.count||i.repeat||1)||1})).filter(i=>i.x)})).filter(c=>c.t&&c.a.length);if(!AZ.length)throw 0;try{localStorage.setItem('sk_az',JSON.stringify(AZ))}catch(e){}}
+  drawAz('');
+ }catch(e){$('azCats').innerHTML='<p>تعذّر تحميل الأذكار. تحقق من الاتصال.</p><button id="azRetry">إعادة المحاولة</button>';$('azRetry').onclick=loadAdhkar}
 }
-function drawAz(q){
-  $('azCats').innerHTML=AZ.map((c,i)=>({c,i})).filter(o=>!q||o.c.t.includes(q)).map(o=>`<button data-az="${o.i}">${esc(o.c.t)}</button>`).join('')||'<span class="mu">لا توجد نتيجة</span>';
-  $$('#azCats [data-az]').forEach(b=>b.onclick=()=>showAz(+b.dataset.az));
-}
+function drawAz(q){$('azCats').innerHTML=AZ.map((c,i)=>({c,i})).filter(o=>!q||o.c.t.includes(q)).map(o=>`<button data-az="${o.i}">${esc(o.c.t)}</button>`).join('')||'<span class="mu">لا توجد نتيجة</span>';$$('#azCats [data-az]').forEach(b=>b.onclick=()=>showAz(+b.dataset.az))}
 $('azFind').oninput=e=>AZ&&drawAz(e.target.value.trim());
 function showAz(i){
-  const c=AZ[i];
-  $('azBox').innerHTML=`<h3>${esc(c.t)}</h3>`+c.a.map((it,k)=>`<div class="card"><div class="atxt">${esc(it.x)}</div><div class="row"><button data-cnt="${k}" data-max="${it.n}" data-left="${it.n}">${it.n>1?`التكرار: ${ar(it.n)} مرة`:'اضغط عند الانتهاء'}</button><button class="alt" data-cp="${k}">نسخ</button></div></div>`).join('');
-  $$('#azBox [data-cnt]').forEach(b=>b.onclick=()=>{let l=+b.dataset.left;if(l<=0){l=+b.dataset.max;b.dataset.left=l;b.disabled=false;b.textContent=l>1?`التكرار: ${ar(l)} مرة`:'اضغط عند الانتهاء';return}
-    l--;b.dataset.left=l;if(l<=0){b.textContent='تم — اضغط للإعادة';bump('adhkar')}else b.textContent=`المتبقي: ${ar(l)}`});
-  $$('#azBox [data-cp]').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(c.a[+b.dataset.cp].x).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1)));
-  $('azBox').scrollIntoView({behavior:'smooth'});
+ stopSpeech();AZ_CURRENT=i;const c=AZ[i];$('azBox').dataset.cat=String(i);
+ $('azBox').innerHTML=`<h3>${esc(c.t)}</h3>`+c.a.map((it,k)=>`<div class="card" data-tts-card="az-${k}"><div class="atxt">${esc(it.x)}</div><div class="row"><button data-cnt="${k}" data-max="${it.n}" data-left="${it.n}">${it.n>1?`التكرار: ${ar(it.n)} مرة`:'اضغط عند الانتهاء'}</button><button class="alt" data-cp="${k}">نسخ</button><button class="alt" data-speak-kind="az" data-speak-id="${k}">استماع</button><button class="alt" data-az-explain="${k}">معنى الذكر وفضله</button></div></div>`).join('');
+ $$('#azBox [data-cnt]').forEach(b=>b.onclick=()=>{let l=+b.dataset.left;if(l<=0){l=+b.dataset.max;b.dataset.left=l;b.disabled=false;b.textContent=l>1?`التكرار: ${ar(l)} مرة`:'اضغط عند الانتهاء';return}l--;b.dataset.left=l;if(l<=0){b.textContent='تم — اضغط للإعادة';bump('adhkar')}else b.textContent=`المتبقي: ${ar(l)}`});
+ $$('#azBox [data-cp]').forEach(b=>b.onclick=()=>copyText(c.a[+b.dataset.cp].x));
+ $$('#azBox [data-az-explain]').forEach(b=>b.onclick=()=>{const it=c.a[+b.dataset.azExplain];showVerifiedInfo('az',c.t,it.x,'مجموعة الأذكار المحمّلة من ملف الأذكار المفتوح المصدر؛ لا تتوفر بيانات شرح موثقة مرفقة بكل ذكر')});
+ attachSpeechButtons();$('azBox').scrollIntoView({behavior:'smooth'});
 }
 
 /* ---------- الأحاديث (الأربعون النووية) ---------- */
 let HD=null;
-async function loadHadith(){
-  if(HD)return drawHd('');
-  $('hdInfo').textContent='جارٍ التحميل…';
-  try{
-    const b='https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-nawawi';
-    const j=await fetchJson([b+'.min.json',b+'.json','https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/ara-nawawi.min.json']);
-    HD=(j.hadiths||[]).filter(h=>h.text);if(!HD.length)throw 0;drawHd('');
-  }catch(e){$('hdInfo').textContent='تعذّر تحميل الأحاديث. تحقق من الاتصال ثم أعد فتح الصفحة.'}
-}
-function drawHd(q){
-  const l=HD.filter(h=>!q||plain(h.text).includes(plain(q)));
-  $('hdInfo').textContent=`${ar(l.length)} حديثًا — المصدر: الأربعون النووية`;
-  $('hdBox').innerHTML=l.map(h=>`<div class="card"><div class="mu">الحديث ${ar(h.hadithnumber)}</div><div class="atxt">${esc(h.text)}</div><button class="alt" data-hc="${h.hadithnumber}">نسخ</button></div>`).join('');
-  $$('#hdBox [data-hc]').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(HD.find(h=>String(h.hadithnumber)===b.dataset.hc).text).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1)));
+async function loadHadith(){if(HD)return drawHd('');$('hdInfo').textContent='جارٍ التحميل…';try{const b='https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-nawawi';const j=await fetchJson([b+'.min.json',b+'.json','https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/ara-nawawi.min.json']);HD=(j.hadiths||[]).filter(h=>h.text);if(!HD.length)throw 0;drawHd('')}catch(e){$('hdInfo').textContent='تعذّر تحميل الأحاديث. تحقق من الاتصال ثم أعد فتح الصفحة.'}}
+function drawHd(q){stopSpeech();const l=HD.filter(h=>!q||plain(h.text).includes(plain(q)));$('hdInfo').textContent=`${ar(l.length)} حديثًا — المصدر: الأربعون النووية`;
+ $('hdBox').innerHTML=l.map(h=>`<div class="card" data-tts-card="hd-${h.hadithnumber}"><div class="mu">الحديث ${ar(h.hadithnumber)}</div><div class="atxt">${esc(h.text)}</div><div class="row"><button class="alt" data-hc="${h.hadithnumber}">نسخ</button><button class="alt" data-speak-kind="hd" data-speak-id="${h.hadithnumber}">استماع</button><button class="alt" data-hd-explain="${h.hadithnumber}">شرح الحديث</button></div></div>`).join('');
+ $$('#hdBox [data-hc]').forEach(b=>b.onclick=()=>copyText(HD.find(h=>String(h.hadithnumber)===b.dataset.hc).text));
+ $$('#hdBox [data-hd-explain]').forEach(b=>b.onclick=()=>{const h=HD.find(x=>String(x.hadithnumber)===b.dataset.hdExplain);showVerifiedInfo('hadith','الحديث '+ar(h.hadithnumber),h.text,'الأربعون النووية — نص الحديث عبر Hadith API؛ لا يتوفر شرح موثق مرفق في مصدر البيانات')});attachSpeechButtons();
 }
 $('hdFind').oninput=e=>HD&&drawHd(e.target.value.trim());
+initSpeechControls();
+
+/* ---------- تفسير القرآن من موسوعة القرآن الكريم QuranEnc ---------- */
+let TAF_SOURCES=[],TAF_CURRENT={s:1,a:1,text:''},TAF_DATA=null,TAF_TAB='tafsir';
+const TAF_FALLBACK=[{key:'arabic_moyassar',title:'التفسير الميسر'},{key:'arabic_saadi',title:'تفسير السعدي'}];
+async function loadTafSources(){
+ const sel=$('tafSource');if(!sel)return;
+ try{const j=await fetchJson(['https://quranenc.com/api/v1/tafsirs/list/ar?localization=ar','https://quranenc.com/api/v1/tafsirs/list?localization=ar']);
+  const arr=j.tafsirs||j.result||j.translations||[];TAF_SOURCES=arr.filter(x=>(x.language_iso_code==='ar'||/arab/i.test(x.language||x.language_name||''))).map(x=>({key:x.key||x.translation_key||x.tafsir_key,title:x.title||x.name||x.translated_name||x.key})).filter(x=>x.key);
+ }catch(e){TAF_SOURCES=TAF_FALLBACK}
+ if(!TAF_SOURCES.length)TAF_SOURCES=TAF_FALLBACK;
+ sel.innerHTML=TAF_SOURCES.map(x=>`<option value="${esc(x.key)}">${esc(x.title)}</option>`).join('');
+}
+function openTafsir(s,a){TAF_CURRENT={s,a,text:curAy[a-1]||''};$('tafsirPanel').classList.remove('hide');$('tafTitle').textContent=`تفسير سورة ${NM[s-1]} — الآية ${ar(a)}`;$('tafBody').innerHTML='<p class="mu">جارٍ تحميل التفسير من المصدر…</p>';loadTafsir();}
+async function loadTafsir(){
+ const key=$('tafSource').value||'arabic_muyassar',s=TAF_CURRENT.s,a=TAF_CURRENT.a;
+ try{const j=await fetchJson([`https://quranenc.com/api/v1/tafsir/aya/${encodeURIComponent(key)}/${s}/${a}`]);if(s!==TAF_CURRENT.s||a!==TAF_CURRENT.a)return;
+  const arr=j.result||j.tafsir||[];TAF_DATA=Array.isArray(arr)?arr:[arr];if(!TAF_DATA.length)throw new Error('empty');renderTafTab(TAF_TAB);
+ }catch(e){TAF_DATA=null;$('tafBody').innerHTML='<p class="explain-muted">لم يتوفر تفسير لهذه الآية من المصدر المختار حاليًا. جرّب مصدرًا آخر أو أعد المحاولة لاحقًا.</p>'}
+}
+function cleanTafText(v){const box=document.createElement('div');box.innerHTML=String(v||'');return box.textContent||box.innerText||''}
+function renderTafTab(tab){TAF_TAB=tab;$$('#tafTabs [data-taf-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tafTab===tab));const body=$('tafBody');
+ if(tab==='tafsir'){if(!TAF_DATA){body.innerHTML='<p class="explain-muted">التفسير غير متوفر من المصدر الحالي.</p>';return}body.innerHTML=TAF_DATA.map(x=>`<p>${esc(cleanTafText(x.text||x.tafsir||x.content||''))}</p>`).join('')||'<p class="explain-muted">لم يرد نص تفسير لهذه الآية.</p>';}
+ else if(tab==='words')body.innerHTML='<p class="explain-muted">لا تتوفر حاليًا بيانات موثقة مستقلة لشرح مفردات هذه الآية من المصدر المختار.</p>';
+ else if(tab==='reason')body.innerHTML='<p class="explain-muted">لم نعثر في البيانات المتاحة على سبب نزول موثق لهذه الآية. لا يعني ذلك نفي وجوده في كتب أخرى.</p>';
+ else{const src=TAF_SOURCES.find(x=>x.key===$('tafSource').value);body.innerHTML=`<p>المصدر: ${esc(src?.title||$('tafSource').value||'QuranEnc')}</p><p>الناشر: موسوعة القرآن الكريم — QuranEnc.com</p><p><a href="https://quranenc.com/ar/browse/${encodeURIComponent($('tafSource').value)}/${TAF_CURRENT.s}/${TAF_CURRENT.a}" target="_blank" rel="noopener">فتح الآية في المصدر الأصلي</a></p><p><a href="https://quranenc.com/ar/home/api" target="_blank" rel="noopener">توثيق واجهة المصدر</a></p>`}
+}
+$('tafSource').onchange=()=>{TAF_TAB='tafsir';loadTafsir()};$$('#tafTabs [data-taf-tab]').forEach(b=>b.onclick=()=>renderTafTab(b.dataset.tafTab));
+$('tafClose').onclick=()=>$('tafsirPanel').classList.add('hide');
+$('tafPrev').onclick=()=>{if(TAF_CURRENT.a>1)openTafsir(TAF_CURRENT.s,TAF_CURRENT.a-1);else if(TAF_CURRENT.s>1)openTafsir(TAF_CURRENT.s-1,CN[TAF_CURRENT.s-2])};
+$('tafNext').onclick=()=>{if(TAF_CURRENT.a<CN[TAF_CURRENT.s-1])openTafsir(TAF_CURRENT.s,TAF_CURRENT.a+1);else if(TAF_CURRENT.s<114)openTafsir(TAF_CURRENT.s+1,1)};
+$('tafCopy').onclick=()=>copyText(`تفسير سورة ${NM[TAF_CURRENT.s-1]} الآية ${TAF_CURRENT.a}\n${TAF_DATA?TAF_DATA.map(x=>cleanTafText(x.text||x.tafsir||x.content||'')).join('\n'):'التفسير غير متوفر'}`);
+$('tafShare').onclick=()=>shareText(`تفسير سورة ${NM[TAF_CURRENT.s-1]} الآية ${TAF_CURRENT.a}\n${TAF_DATA?TAF_DATA.map(x=>cleanTafText(x.text||x.tafsir||x.content||'')).join('\n'):'التفسير غير متوفر'}\nالمصدر: QuranEnc.com`);
+loadTafSources().then(()=>{if($('tafsirPanel')&&!$('tafsirPanel').classList.contains('hide'))loadTafsir()});
 
 /* ---------- الورد ---------- */
 $$('[data-nm]').forEach(b=>b.onclick=()=>$('wN').value=b.dataset.nm);
