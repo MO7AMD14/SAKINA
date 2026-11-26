@@ -153,6 +153,22 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .schDay label{font-size:.9rem;color:var(--mu)}
 .schDay input{margin:.2rem 0 .5rem}
 .schSaved{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;padding:.8rem 1rem;border:1px solid rgba(63,193,176,.35);border-radius:14px;background:rgba(63,193,176,.08);margin-bottom:.8rem}
+.dateParts{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:.65rem;align-items:end;min-width:0}
+.dateParts label{min-width:0}.dateParts input,.dateParts select{width:100%;min-width:0}
+.schTable{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0 .65rem;min-width:0}
+.schTable th{padding:.8rem .55rem;color:var(--au);font-size:.95rem}
+.schTable td{padding:.8rem .55rem;background:var(--card);border-block:1px solid var(--bd);vertical-align:middle}
+.schTable td:first-child{border-inline-start:1px solid var(--bd);border-radius:0 14px 14px 0;font-weight:800;color:var(--au);width:13%}
+.schTable td:last-child{border-inline-end:1px solid var(--bd);border-radius:14px 0 0 14px}
+.schTable input[type=text]{width:100%;min-width:0;padding:.85rem .7rem;border-radius:12px;font-size:1rem}
+.schDate{display:block;font-size:.78rem;color:var(--mu);font-weight:400;margin-top:.25rem}
+.schView .schTable td{font-size:1rem;line-height:1.7;overflow-wrap:anywhere}
+.schView .schTable td:first-child{white-space:nowrap}
+.reviewNotice{border:1px solid rgba(220,90,90,.35);background:rgba(220,90,90,.08);border-radius:15px;padding:1rem;margin-bottom:1rem}
+.reviewNotice b{display:block;margin-bottom:.35rem}
+.reviewDue{border-color:rgba(220,90,90,.45)!important}
+@media(max-width:700px){.dateParts{grid-template-columns:1fr 1.2fr 1fr}.schTable{border-spacing:0 .45rem}.schTable thead{display:none}.schTable,.schTable tbody,.schTable tr,.schTable td{display:block;width:100%}.schTable tr{border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:.8rem}.schTable td{border:0!important;border-radius:0!important;padding:.65rem .8rem;display:grid;grid-template-columns:74px minmax(0,1fr);gap:.6rem;align-items:center}.schTable td:first-child{display:block;width:auto;background:rgba(236,188,88,.08);padding:.8rem}.schTable td:first-child .schDate{display:inline;margin-inline-start:.5rem}.schTable td:not(:first-child)::before{content:attr(data-label);font-size:.82rem;color:var(--mu);font-weight:700}.schTable td input{font-size:1rem}.schView .schTable td{display:grid;grid-template-columns:74px minmax(0,1fr)}.schView .schTable td:first-child{display:block}}
+
 .schView .schDay{border-color:rgba(236,188,88,.35)}
 #tsBtn{width:min(220px,62vw);height:min(220px,62vw);font-size:3rem}
 #qWrap{position:relative;padding:1rem;border-radius:50%;background:radial-gradient(circle,rgba(236,188,88,.13),transparent 68%)}
@@ -291,7 +307,11 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
   <h2>خطط الختمة</h2>
   <p class="help"><b>ما هي الختمة؟</b> أن تقرأ القرآن كله من أوله إلى آخره (604 صفحات). اختر في كم يومًا تريد أن تنهيه، وسنحسب لك كم صفحة تقرأ كل يوم، ثم تضغط «تم ورد اليوم» كلما قرأت.</p>
   <div class="card"><h3>إنشاء خطة</h3><div class="grid"><label>أريد أن أختم في<select id="kD"><option value="30">30 يومًا (شهر)</option><option value="60">60 يومًا</option><option value="90">90 يومًا</option><option value="0">عدد أيام أكتبه بنفسي</option></select></label>
-  <label>عدد الأيام (فقط لو اخترت: أكتبه بنفسي)<input id="kC" class="num" inputmode="numeric" placeholder="مثال: 45"></label><label>تاريخ البداية<input id="kS" type="date"></label></div>
+  <label>عدد الأيام (فقط لو اخترت: أكتبه بنفسي)<input id="kC" class="num" inputmode="numeric" placeholder="مثال: 45"></label><div class="dateParts" aria-label="تاريخ بداية الختمة">
+    <label>اليوم<input id="kDay" type="number" min="1" max="31" inputmode="numeric" placeholder="اليوم"></label>
+    <label>الشهر<select id="kMonth"><option value="">الشهر</option><option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option><option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option><option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option><option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option></select></label>
+    <label>السنة<input id="kYear" type="number" min="2020" max="2100" inputmode="numeric" placeholder="السنة"></label>
+  </div></div>
   <p id="kPrev" class="mu"></p><button id="kAdd">إنشاء الخطة</button></div>
   <h3>خططي</h3><div id="kList"></div>
 </section>
@@ -302,7 +322,7 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
   <div class="card"><h3>إضافة محفوظ</h3><div class="grid"><label>السورة<select id="hS"></select></label><label>من الآية رقم<input id="hF" class="num" inputmode="numeric" placeholder="مثال: 1"></label><label>إلى الآية رقم<input id="hT" class="num" inputmode="numeric" placeholder="مثال: 10"></label>
   <label>مستوى الحفظ<select id="hL"><option value="1">ضعيف</option><option value="2">متوسط</option><option value="3">جيد</option><option value="4">متقن</option></select></label><label>راجعها بعد كم يوم؟<input id="hI" class="num" inputmode="numeric" placeholder="مثال: 3"></label></div>
   <label>ملاحظات (اختياري)<textarea id="hN" rows="2" placeholder="مثال: أخطئ في الآية 5"></textarea></label><button id="hAdd">إضافة المحفوظ</button></div>
-  <h3>محفوظاتي</h3><div id="hList"></div>
+  <div class="row" style="justify-content:space-between;margin:1rem 0"><h3>محفوظاتي ومواعيد المراجعة</h3><button class="alt" id="hNotify">تفعيل تنبيه المراجعة</button></div><div id="hList"></div>
 </section>
 
 <section id="goals" class="pg hide">
@@ -704,14 +724,16 @@ async function renderWird(){
 }
 
 /* ---------- الختمة (604 صفحة) ---------- */
-$('kS').value=today();
+function setKhatmaDate(value){const [y,m,d]=value.split('-').map(Number);$('kDay').value=d;$('kMonth').value=String(m);$('kYear').value=y}
+function getKhatmaDate(){const d=+$('kDay').value,m=+$('kMonth').value,y=+$('kYear').value;if(!d||!m||!y)return '';const dt=new Date(y,m-1,d);if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)return '';return `${y}-${pad(m)}-${pad(d)}`}
+setKhatmaDate(today());
 function renderKPrev(){const d=+$('kD').value||nv('kC');$('kPrev').textContent=d>0?`إذا اخترت ${ar(d)} يومًا فسنطلب منك قراءة ${ar(Math.ceil(604/d))} صفحة كل يوم.`:'اختر عدد الأيام ليظهر لك المقدار اليومي.'}
 $('kD').onchange=$('kC').oninput=renderKPrev;
-$('kAdd').onclick=async()=>{const d=+$('kD').value||nv('kC');if(!d||d<1)return toast('اكتب عدد الأيام رقمًا، مثل 45',1);
-  await safe(()=>addTo('khatmaPlans',{days:d,start:$('kS').value||today(),perDay:Math.ceil(604/d),done:[],paused:false}),'تم إنشاء الخطة');renderKhatma()};
+$('kAdd').onclick=async()=>{const d=+$('kD').value||nv('kC'),start=getKhatmaDate();if(!d||d<1)return toast('اكتب عدد الأيام رقمًا، مثل 45',1);if(!start)return toast('اختر تاريخًا صحيحًا: اليوم والشهر والسنة',1);if(start<today())return toast('اختَر تاريخ اليوم أو تاريخًا قادمًا',1);
+  await safe(()=>addTo('khatmaPlans',{days:d,start,perDay:Math.ceil(604/d),done:[],paused:false}),'تم إنشاء الخطة');renderKhatma()};
 async function renderKhatma(){
   const l=await safe(()=>items('khatmaPlans'))||[];
-  $('kList').innerHTML=l.length?l.map(k=>{const n=(k.done||[]).length,pg=Math.min(604,n*k.perDay);return `<div class="card"><b>ختمة خلال ${ar(k.days)} يومًا</b> <span class="mu">بداية ${k.start} — ${k.paused?'موقوفة':'جارية'}</span>
+  $('kList').innerHTML=l.length?l.map(k=>{const n=(k.done||[]).length,pg=Math.min(604,n*k.perDay);return `<div class="card"><b>ختمة خلال ${ar(k.days)} يومًا</b> <span class="mu">بداية ${new Date(k.start+'T00:00:00').toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} — ${k.paused?'موقوفة':'جارية'}</span>
   <p>المطلوب يوميًا: <b>${ar(k.perDay)}</b> صفحة<br>أُنجز ${ar(n)} يومًا (${ar(pg)} من ${ar(604)} صفحة) — المتبقي ${ar(Math.max(0,k.days-n))} يومًا</p><div class="bar"><i style="width:0" data-w="${pg/604*100}"></i></div>
   <div class="row" style="margin-top:.8rem"><button data-k="${k.id}" ${(k.done||[]).includes(today())||k.paused?'disabled':''}>تم ورد اليوم</button><button class="alt" data-kp="${k.id}">${k.paused?'استئناف':'إيقاف'}</button><button class="del" data-kx="${k.id}">حذف</button></div></div>`}).join(''):'<p class="mu">لا توجد خطط بعد.</p>';
   setTimeout(()=>$$('#kList .bar i').forEach(i=>i.style.width=i.dataset.w+'%'),60);
@@ -729,15 +751,26 @@ $('hAdd').onclick=async()=>{const n=+$('hS').value,f=nv('hF'),t=nv('hT'),max=CN[
   bump('hifz');$('hF').value=$('hT').value=$('hI').value=$('hN').value='';renderHifz()};
 async function renderHifz(){
   const l=(await safe(()=>items('memorization'))||[]).sort((a,b)=>a.next.localeCompare(b.next)),LV=['','ضعيف','متوسط','جيد','متقن'];
-  $('hList').innerHTML=l.length?l.map(h=>{const late=h.next<today();return `<div class="card ${late?'late':''}"><b>${esc(h.name)}</b> (${ar(h.from)}–${ar(h.to)}) <span class="mu">الإتقان: ${LV[h.level]} — مراجعات: ${ar(h.reviews)}</span>
-  <div>المراجعة القادمة: <b>${h.next}</b> ${late?'<span style="color:var(--er)">(متأخرة)</span>':''}</div>${h.notes?`<p class="mu">${esc(h.notes)}</p>`:''}
-  <div class="row"><button data-r="${h.id}">تمت المراجعة</button><button class="alt" data-s="${h.id}">تأجيل يوم</button><button class="alt" data-n="${h.id}">ملاحظة</button><button class="del" data-hx="${h.id}">حذف</button></div></div>`}).join(''):'<p class="mu">لم تضف محفوظات بعد.</p>';
+  const due=l.filter(h=>h.next<=today());
+  const notice=due.length?`<div class="reviewNotice"><b>🔔 تذكير المراجعة</b>عندك ${ar(due.length)} ${due.length===1?'سورة مستحقة للمراجعة':'سور مستحقة للمراجعة'} اليوم. ابدأ بالمراجعة وسجّلها بعد التسميع.<div class="mu" style="margin-top:.4rem">${due.map(h=>esc(h.name)).join('، ')}</div></div>`:'';
+  $('hList').innerHTML=notice+(l.length?l.map(h=>{const isDue=h.next<=today();return `<div class="card ${isDue?'reviewDue':''}"><b>${esc(h.name)}</b> (${ar(h.from)}–${ar(h.to)}) <span class="mu">الإتقان: ${LV[h.level]} — مراجعات: ${ar(h.reviews||0)}</span>
+  <div>موعد المراجعة: <b>${new Date(h.next+'T00:00:00').toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</b> ${isDue?'<span style="color:var(--er);font-weight:700"> — مستحقة الآن</span>':''}</div>${h.notes?`<p class="mu">${esc(h.notes)}</p>`:''}
+  <div class="row"><button data-r="${h.id}">تمت المراجعة</button><button class="alt" data-s="${h.id}">تأجيل يوم</button><button class="alt" data-n="${h.id}">ملاحظة</button><button class="del" data-hx="${h.id}">حذف</button></div></div>`}).join(''):'<p class="mu">لم تضف محفوظات بعد.</p>');
   const up=(id,d)=>safe(()=>patch('memorization',id,d));
-  $$('#hList [data-r]').forEach(b=>b.onclick=async()=>{const h=l.find(x=>x.id===b.dataset.r);await up(h.id,{next:addDays(today(),h.interval),reviews:h.reviews+1});bump('review');toast('تم تسجيل المراجعة');renderHifz()});
+  $$('#hList [data-r]').forEach(b=>b.onclick=async()=>{const h=l.find(x=>x.id===b.dataset.r);await up(h.id,{next:addDays(today(),h.interval||3),reviews:(h.reviews||0)+1});bump('review');toast('ممتاز! تم تسجيل المراجعة وتحديد الموعد القادم');renderHifz()});
   $$('#hList [data-s]').forEach(b=>b.onclick=async()=>{await up(b.dataset.s,{next:addDays(today(),1)});renderHifz()});
   $$('#hList [data-n]').forEach(b=>b.onclick=async()=>{const h=l.find(x=>x.id===b.dataset.n),t=prompt('ملاحظات بعد التسميع',h.notes||'');if(t!==null){await up(h.id,{notes:t});renderHifz()}});
   $$('#hList [data-hx]').forEach(b=>b.onclick=async()=>{if(confirm('حذف المحفوظ؟')){await safe(()=>delFrom('memorization',b.dataset.hx),'تم الحذف');renderHifz()}});
 }
+$('hNotify').onclick=async()=>{if(!('Notification'in window))return toast('المتصفح لا يدعم الإشعارات',1);const p=await Notification.requestPermission();toast(p==='granted'?'تم تفعيل إشعارات المراجعة على هذا الجهاز':'لم يتم السماح بالإشعارات',p!=='granted');if(p==='granted')checkReviewReminders(true)};
+async function checkReviewReminders(force=false){
+  if(!auth.currentUser||!('Notification'in window)||Notification.permission!=='granted')return;
+  const list=await safe(()=>items('memorization'))||[],due=list.filter(h=>h.next<=today());if(!due.length)return;
+  const key='sk_review_notice_'+today();if(!force&&localStorage.getItem(key)==='1')return;
+  try{new Notification('سكينة — موعد المراجعة',{body:`لديك ${due.length} ${due.length===1?'سورة':'سور'} للمراجعة: ${due.slice(0,3).map(h=>h.name).join('، ')}`,icon:'icon-180.png'});localStorage.setItem(key,'1')}catch(e){}
+}
+setTimeout(()=>checkReviewReminders(),2500);
+setInterval(()=>checkReviewReminders(),60000);
 
 /* ---------- الأهداف ---------- */
 $$('[data-gt]').forEach(b=>b.onclick=()=>$('gT').value=b.dataset.gt);
@@ -1083,43 +1116,38 @@ const tfText=()=>`${$('tfAy').textContent}\n\n${$('tfTx').textContent}\n\n(${$('
 $('tfC').onclick=()=>navigator.clipboard.writeText(tfText()).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1));
 $('tfSh').onclick=()=>navigator.share?navigator.share({text:tfText()}).catch(()=>{}):$('tfC').click();
 
-/* ---------- الجدول الأسبوعي: جدول واحد مختصر للأيام والصلوات ---------- */
+/* ---------- الجدول الأسبوعي: حفظ ومراجعة وورد فقط ---------- */
 const ar=n=>Number(n).toLocaleString('ar-EG',{useGrouping:false});
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const PRAYERS=[['f','فجر'],['d','ظهر'],['a','عصر'],['m','مغرب'],['i','عشاء']];
 const mk=(id,html)=>{const s=document.createElement('section');s.id=id;s.className='pg hide';s.innerHTML=html;document.querySelector('main').appendChild(s)};
 mk('sched',`<div class="row" style="justify-content:space-between;align-items:center"><h2>جدولي الأسبوعي</h2><span class="mu" id="schStatus">غير محفوظ</span></div>
-<p class="mu">جدول واحد للأسبوع كله: مهامك اليومية ومتابعة الصلوات في نفس الصف، من غير قوائم منفصلة أو تمرير داخل الجدول.</p>
+<p class="help">نظّم أسبوعك في جدول واحد للحفظ والمراجعة والورد فقط، من غير صلوات أو أعمدة إضافية.</p>
 <div class="schSaved"><div><b id="schSavedTitle">لا يوجد جدول محفوظ بعد</b><div class="mu" id="schSavedMeta">اكتب خطتك ثم احفظها</div></div>
 <div class="row"><button id="schView" class="alt" disabled>عرض الجدول</button><button id="schEdit" class="alt hide">تعديل الجدول</button></div></div>
-<div class="card" id="schEditor"><div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الصلوات</th><th>حفظ</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody id="schB"></tbody></table></div><div class="row" style="justify-content:flex-start;margin-top:1rem"><button id="schSave">حفظ الجدول</button></div></div>
+<div class="card" id="schEditor"><div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الحفظ</th><th>المراجعة</th><th>الورد</th></tr></thead><tbody id="schB"></tbody></table></div><div class="row" style="justify-content:flex-start;margin-top:1rem"><button id="schSave">حفظ الجدول</button></div></div>
 <div class="card schView hide" id="schViewer"><div class="row" style="justify-content:space-between"><h3>الجدول المحفوظ</h3><span class="mu" id="schViewDate"></span></div><div id="schViewBody"></div></div>`);
 let schData={},schSavedAt=null;
 function weekDate(i){const d=new Date();d.setDate(d.getDate()-d.getDay()+i);return d}
-function prayerInputs(i,x,disabled=false){return `<div class="prayerChecks">${PRAYERS.map(([k,n])=>`<label title="${n}"><input type="checkbox" data-pr="${k}" data-d="${i}" ${x.p?.[k]?'checked':''} ${disabled?'disabled':''}>${n}</label>`).join('')}</div>`}
 function renderSchEditor(){
-  $('schB').innerHTML=DAYS.map((d,i)=>{const x=schData[i]||{},date=weekDate(i);return `<tr><td>${d}<span class="schDate">${date.toLocaleDateString('ar',{day:'numeric',month:'numeric'})}</span></td><td>${prayerInputs(i,x)}</td><td><input type="text" data-d="${i}" data-k="h" value="${esc(x.h||'')}" placeholder="حفظ"></td><td><input type="text" data-d="${i}" data-k="m" value="${esc(x.m||'')}" placeholder="مراجعة"></td><td><input type="text" data-d="${i}" data-k="w" value="${esc(x.w||'')}" placeholder="الورد"></td></tr>`}).join('');
+  $('schB').innerHTML=DAYS.map((d,i)=>{const x=schData[i]||{},date=weekDate(i);return `<tr><td><b>${d}</b><span class="schDate">${date.toLocaleDateString('ar',{day:'numeric',month:'long'})}</span></td><td data-label="الحفظ"><input type="text" data-d="${i}" data-k="h" value="${esc(x.h||'')}" placeholder="مثال: حفظ ١–٥ من البقرة"></td><td data-label="المراجعة"><input type="text" data-d="${i}" data-k="m" value="${esc(x.m||'')}" placeholder="مثال: مراجعة آل عمران"></td><td data-label="الورد"><input type="text" data-d="${i}" data-k="w" value="${esc(x.w||'')}" placeholder="مثال: ٤ صفحات"></td></tr>`}).join('');
 }
 async function loadSch(){
-  try{const snap=await get(R('schedule'));const data=snap.val()||{};schData=data.days||data;schSavedAt=data.savedAt||null;
-    const has=Object.values(schData).some(x=>x&&typeof x==='object'&&(!!(x.h||x.m||x.w)||Object.values(x.p||{}).some(Boolean)));
+  try{const snap=await get(R('schedule'));const data=snap.val()||{};const raw=data.days||data;schData={};Object.keys(raw).forEach(k=>{const x=raw[k]||{};schData[k]={h:x.h||'',m:x.m||'',w:x.w||''}});schSavedAt=data.savedAt||null;
+    const has=Object.values(schData).some(x=>!!(x.h||x.m||x.w));
     $('schSavedTitle').textContent=has?'جدولك الأسبوعي محفوظ':'لا يوجد جدول محفوظ بعد';$('schSavedMeta').textContent=schSavedAt?'آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar'):'اكتب خطتك ثم احفظها';
     $('schView').disabled=!has;$('schEdit').classList.toggle('hide',!has);$('schStatus').textContent=has?'محفوظ':'غير محفوظ';renderSchEditor();
   }catch(e){toast('تعذّر تحميل الجدول',1)}
 }
 $('schSave').onclick=async()=>{
-  const o={};
-  $$('#schB input[data-k]').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{} )[i.dataset.k]=i.value.trim()});
-  $$('#schB input[data-pr]').forEach(i=>{const day=o[i.dataset.d]=o[i.dataset.d]||{};day.p=day.p||{};day.p[i.dataset.pr]=i.checked});
-  const has=Object.values(o).some(day=>Object.values(day).some(v=>typeof v==='object'?Object.values(v).some(Boolean):!!v));
-  if(!has)return toast('أضف مهمة أو حدّد صلاة واحدة على الأقل',1);
+  const o={};$$('#schB input[data-k]').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{})[i.dataset.k]=i.value.trim()});
+  const has=Object.values(o).some(x=>x.h||x.m||x.w);if(!has)return toast('اكتب مهمة واحدة على الأقل في الحفظ أو المراجعة أو الورد',1);
   const payload={days:o,savedAt:Date.now(),weekStart:ymd(weekDate(0))};
   try{await set(R('schedule'),payload);schData=o;schSavedAt=payload.savedAt;$('schSavedTitle').textContent='جدولك الأسبوعي محفوظ';$('schSavedMeta').textContent='آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar');$('schView').disabled=false;$('schEdit').classList.remove('hide');$('schStatus').textContent='تم الحفظ';toast('تم حفظ الجدول الأسبوعي');renderSchView()}
   catch(e){toast('تعذّر حفظ الجدول',1)}
 };
 function renderSchView(){
-  $('schViewBody').innerHTML=`<div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الصلوات</th><th>حفظ</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody>${DAYS.map((d,i)=>{const x=schData[i]||{};return `<tr><td>${d}</td><td>${prayerInputs(i,x,true)}</td><td>${esc(x.h||'—')}</td><td>${esc(x.m||'—')}</td><td>${esc(x.w||'—')}</td></tr>`}).join('')}</tbody></table></div>`;
+  $('schViewBody').innerHTML=`<div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الحفظ</th><th>المراجعة</th><th>الورد</th></tr></thead><tbody>${DAYS.map((d,i)=>{const x=schData[i]||{};return `<tr><td><b>${d}</b></td><td data-label="الحفظ">${esc(x.h||'—')}</td><td data-label="المراجعة">${esc(x.m||'—')}</td><td data-label="الورد">${esc(x.w||'—')}</td></tr>`}).join('')}</tbody></table></div>`;
   $('schViewDate').textContent=schSavedAt?new Date(schSavedAt).toLocaleDateString('ar'):'';
 }
 $('schView').onclick=()=>{renderSchView();$('schViewer').classList.remove('hide');$('schEditor').classList.add('hide')};
@@ -1133,9 +1161,8 @@ async function loadDash(){
   if(!auth.currentUser)return;const t=new Date().getDay(),d=ymd(new Date());let v={},dn={},pl={};
   try{const all=(await get(R('schedule'))).val()||{};v=all.days||all;pl=(await get(R('prayerLog',d))).val()||{}}catch(e){}
   const todayPlan=v[t]||{};
-  const rows=[['h','حفظ جديد'],['m','مراجعة'],['w','الورد']].filter(r=>todayPlan[r[0]]).map(r=>`<div style="margin:.25rem 0"><b>${r[1]}:</b> ${esc(todayPlan[r[0]])}</div>`).join('')||'<span class="mu">لا توجد مهام مسجلة لهذا اليوم.</span>';
-  const pDone=Object.values(todayPlan.p||{}).filter(Boolean).length;
-  $('dSch').innerHTML=rows+`<div class="mu" style="margin-top:.5rem">صلوات الجدول: ${ar(pDone)} من ${ar(5)}</div><div class="mu">متابعة الصلوات اليومية: ${ar(Object.values(pl).filter(Boolean).length)} من ${ar(5)}</div>`;
+  const rows=[['h','الحفظ'],['m','المراجعة'],['w','الورد']].filter(r=>todayPlan[r[0]]).map(r=>`<div style="margin:.35rem 0"><b>${r[1]}:</b> ${esc(todayPlan[r[0]])}</div>`).join('')||'<span class="mu">لا توجد مهام مسجلة لهذا اليوم.</span>';
+  $('dSch').innerHTML=rows;
   let c;try{c=JSON.parse(localStorage.getItem('sk_ay'))}catch(e){}
   if(!c||c.d!==d){const n=(Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/864e5)*37)%6236+1;
     try{const j=(await(await fetch(`https://api.alquran.cloud/v1/ayah/${n}/quran-uthmani`)).json()).data;c={d,t:j.text,m:`${j.surah.name} — آية ${ar(j.numberInSurah)}`};localStorage.setItem('sk_ay',JSON.stringify(c))}catch(e){c=null}}
