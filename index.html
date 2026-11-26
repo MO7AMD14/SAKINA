@@ -916,7 +916,7 @@ const st=document.createElement('style');st.textContent=`
 const bar=document.createElement('div');bar.id='aud';
 bar.innerHTML=`<div id="audT"></div><div class="row"><button id="audP" class="alt">إيقاف مؤقت</button><button id="audS" class="del">إيقاف</button>
 <select id="audR" aria-label="السرعة"><option value="0.75">بطيء</option><option value="1" selected>عادي</option><option value="1.25">أسرع</option><option value="1.5">سريع</option></select>
-<select id="audV" class="hide" aria-label="الصوت"></select><input id="audL" type="range" min="0" max="1" step=".05" value="1" aria-label="مستوى الصوت"></div>`;
+<select class="sM" aria-label="المصدر"></select><select class="sV hide" aria-label="الصوت"></select><input id="audL" type="range" min="0" max="1" step=".05" value="1" aria-label="مستوى الصوت"></div>`;
 document.body.appendChild(bar);
 
 /* ---------- بيانات صوت الأذكار ---------- */
@@ -933,7 +933,7 @@ async function loadAU(){
 const absUrl=p=>!p?'':/^https?:/.test(p)?p:BASE+String(p).replace(/^\/+/,'');
 
 /* ---------- المشغّل ---------- */
-const A=new Audio();let Q=[],qi=-1,tok=0,tts=false,rate=1,vol=1,vname='',noted=false;
+const A=new Audio();let Q=[],qi=-1,tok=0,tts=false,rate=1,vol=1,vname='',noted=false,srcMode='rec';try{srcMode=localStorage.getItem('sk_asrc')||'rec';vname=localStorage.getItem('sk_avoice')||''}catch(e){}
 const mark=el=>{document.querySelectorAll('.aplay').forEach(x=>x.classList.remove('aplay'));el&&el.classList.add('aplay')};
 function stop(){tok++;A.pause();speechSynthesis.cancel();Q=[];qi=-1;mark(null);bar.classList.remove('on');$('audP').textContent='إيقاف مؤقت'}
 const voices=()=>speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang));
@@ -954,7 +954,7 @@ function run(){
   bar.classList.add('on');$('audT').textContent=it.text.slice(0,70)+(it.text.length>70?'…':'');$('audP').textContent='إيقاف مؤقت';
   const done=()=>{if(t!==tok)return;qi++;run()};
   const bad=()=>{if(t!==tok)return;it.bad=1;if(!noted){noted=true;toast('لا يوجد تسجيل صوتي لهذا الذكر، تتم القراءة بصوت الجهاز')}run()};
-  if(it.audio&&!it.bad){tts=false;A.src=it.audio;A.playbackRate=rate;A.volume=vol;A.onended=done;A.onerror=bad;A.play().catch(bad);return}
+  if(srcMode==='rec'&&it.audio&&!it.bad){tts=false;A.src=it.audio;A.playbackRate=rate;A.volume=vol;A.onended=done;A.onerror=bad;A.play().catch(bad);return}
   speak(it,t,done)}
 function playList(items,i){stop();Q=items;qi=i;run()}
 $('audS').onclick=stop;
@@ -963,9 +963,10 @@ $('audP').onclick=()=>{
   else if(A.paused){A.play();$('audP').textContent='إيقاف مؤقت'}else{A.pause();$('audP').textContent='استكمال'}};
 $('audR').onchange=e=>{rate=+e.target.value;A.playbackRate=rate};
 $('audL').oninput=e=>{vol=+e.target.value;A.volume=vol};
-$('audV').onchange=e=>{vname=e.target.value};
-function fillVoices(){const v=voices(),s=$('audV');s.classList.toggle('hide',v.length<2);s.innerHTML=v.map(x=>`<option value="${x.name}">${x.name}</option>`).join('')}
-if('speechSynthesis'in window){fillVoices();speechSynthesis.onvoiceschanged=fillVoices}
+document.addEventListener('change',e=>{if(e.target.classList.contains('sM')){srcMode=e.target.value;try{localStorage.setItem('sk_asrc',srcMode)}catch(x){}fillVoices()}else if(e.target.classList.contains('sV')){vname=e.target.value;try{localStorage.setItem('sk_avoice',vname)}catch(x){}fillVoices()}});
+function fillVoices(){const v=voices();document.querySelectorAll('.sM').forEach(s=>{s.innerHTML='<option value="rec">تسجيل المصدر (إن وُجد)</option><option value="dev">صوت الجهاز العربي</option>';s.value=srcMode});
+  document.querySelectorAll('.sV').forEach(s=>{s.classList.toggle('hide',srcMode!=='dev'||v.length<1);s.innerHTML=v.map(x=>`<option value="${x.name}">${x.name}</option>`).join('');if(vname)s.value=vname})}
+fillVoices();if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=fillVoices;
 addEventListener('pagehide',stop);
 document.addEventListener('click',e=>{if(e.target.closest('[data-p]'))stop()});
 
@@ -984,9 +985,9 @@ async function decorate(box,kind){
     (c.querySelector('.row')||c).appendChild(b)});
   if(!box.querySelector('.auAll')){
     const a=document.createElement('div');a.className='row auAll';a.style.margin='0 0 1rem';
-    a.innerHTML='<button class="gold">تشغيل الكل بالترتيب</button><span class="mu">يُقرأ كل ذكر ثم ينتقل للتالي تلقائيًا</span>';
+    a.innerHTML='<button class="gold">تشغيل الكل بالترتيب</button><select class="sM" aria-label="المصدر" style="width:auto;margin:0"></select><select class="sV hide" aria-label="الصوت" style="width:auto;margin:0"></select>';
     a.firstChild.onclick=()=>playList(items(box),0);
-    const h=box.querySelector('h3');h?h.after(a):box.prepend(a)}}
+    const h=box.querySelector('h3');h?h.after(a):box.prepend(a);fillVoices()}}
 [['azBox','az'],['hdBox','hd']].forEach(([id,k])=>{const box=$(id);if(box)new MutationObserver(()=>decorate(box,k)).observe(box,{childList:true})});
 </script>
 <script type="module">
@@ -1006,6 +1007,7 @@ const lk=document.createElement('link');lk.rel='stylesheet';
 lk.href='https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Almarai:wght@400;700&family=El+Messiri:wght@400;700&family=Lateef&display=swap';document.head.appendChild(lk);
 const st=document.createElement('style');st.textContent=`
 html[data-uf] body,html[data-uf] button,html[data-uf] input,html[data-uf] select,html[data-uf] textarea,html[data-uf] .mu,html[data-uf] .help,html[data-uf] .atxt,html[data-uf] .big,html[data-uf] h2,html[data-uf] h3{font-family:var(--uf),Tahoma,sans-serif!important}
+html[data-uf] nav,html[data-uf] nav button,html[data-uf] #bnav button,html[data-uf] button,html[data-uf] select,html[data-uf] input,html[data-uf] textarea{font-family:'Cairo',Tahoma,Arial,sans-serif!important}
 .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--au);display:block;margin:0 0 .6rem;background:var(--card)}
 #tfBox .tx{white-space:pre-wrap;font-size:1.1rem;line-height:2.1}
 .sch{width:100%;border-collapse:collapse}.sch th,.sch td{padding:.35rem;border-bottom:1px solid var(--bd);text-align:right}
