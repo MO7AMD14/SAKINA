@@ -75,7 +75,7 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .pg.in .card,.pg.in .grid>*{animation:rise .55s both}
 .pg.in .grid>:nth-child(2),.pg.in .card:nth-child(2){animation-delay:.07s}.pg.in .grid>:nth-child(3),.pg.in .card:nth-child(3){animation-delay:.14s}.pg.in .grid>:nth-child(4){animation-delay:.2s}
 .hero{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:space-between;align-items:center;padding:1.6rem;border-radius:26px;margin-bottom:1rem;background:linear-gradient(135deg,#1b3496,#0e8f84);color:#fff;box-shadow:var(--sh)}
-.hero .bgstar{left:-200px;top:-250px;width:700px;opacity:.18}.hero>*{position:relative}
+.hero .bgstar{left:-200px;top:-250px;width:700px;opacity:.18}.hero>*{position:relative}.hero .profileFloat{position:absolute}
 .hero h2{font-size:1.9rem;margin:0}.hero p{margin:.2rem 0;color:#dbe4ff}
 .ringW{position:relative;width:160px;height:160px;margin-inline:auto}.ringW svg{transform:rotate(-90deg);width:100%;height:100%}
 .rb{fill:none;stroke:rgba(255,255,255,.2);stroke-width:7}.rf{fill:none;stroke:#ecbc58;stroke-width:7;stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3;transition:stroke-dashoffset 1.2s}
@@ -98,8 +98,8 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .quran .n{display:inline-grid;place-items:center;width:1.9em;height:1.9em;margin:0 .2em;border:1.5px solid var(--au);border-radius:50%;font:600 .42em 'Tajawal',sans-serif;font-style:normal;color:var(--au);vertical-align:middle}
 .skl{height:1.3rem;border-radius:8px;margin:1rem 0;background:linear-gradient(90deg,var(--card),var(--bd),var(--card));background-size:200%;animation:sh 1.2s infinite}
 @keyframes sh{to{background-position:-200% 0}}
-#abar{position:fixed;bottom:1rem;left:50%;transform:translate(-50%,200px);display:flex;gap:.4rem;padding:.6rem;background:var(--bg2);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);transition:transform .35s;z-index:40;flex-wrap:wrap;justify-content:center;width:max-content;max-width:96vw}
-#abar.on{transform:translate(-50%,0)}#abar button{padding:.45rem .8rem;font-size:.9rem}
+#abar{position:relative;display:none;gap:.45rem;padding:.7rem;margin:.9rem 0 0;background:var(--bg2);border:1px solid var(--bd);border-radius:16px;box-shadow:var(--sh);flex-wrap:wrap;justify-content:center;width:100%;max-width:100%;z-index:2}
+#abar.on{display:flex}#abar button{padding:.45rem .8rem;font-size:.9rem}
 .late{border-color:var(--er)}
 .qtxt{font-family:'Amiri Quran',serif;font-size:1.5rem;line-height:2.2}
 .atxt{font-size:1.15rem;line-height:2.1}
@@ -125,7 +125,6 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
  .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
  #stCards{grid-template-columns:repeat(2,minmax(0,1fr))}.big{font-size:1.5rem}
  .cal{gap:.2rem}.cal div{min-height:46px;border-radius:8px;font-size:.85rem}.cal small{font-size:.6rem}.cal .h{font-size:.65rem}
- #abar{bottom:4.6rem}
  .themeTop{top:.6rem;left:.6rem}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -146,9 +145,9 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .cal div.h{background:transparent}
 .cal div.td{border:1px solid var(--au);box-shadow:0 5px 16px rgba(236,188,88,.12)}
 .cal small{font-size:.76rem;margin-top:3px}
-#profileFloat{position:fixed;left:18px;top:16px;z-index:58;width:48px;height:48px;padding:3px;border-radius:50%;background:var(--bg2);border:1px solid var(--au);box-shadow:var(--sh);display:grid;place-items:center}
-#profileFloat img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-#profileFloat:focus-visible{outline:3px solid var(--pri);outline-offset:3px}
+.profileFloat{position:absolute;left:1rem;top:1rem;z-index:3;width:48px;height:48px;padding:3px;border-radius:50%;background:rgba(8,13,38,.72);border:1px solid var(--au);box-shadow:var(--sh);display:grid;place-items:center}
+.profileFloat img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.profileFloat:focus-visible{outline:3px solid var(--pri);outline-offset:3px}
 .schDay{border:1px solid var(--bd);border-radius:16px;padding:1rem;margin:.7rem 0;background:var(--card)}
 .schDay h3{display:flex;align-items:center;gap:.5rem;color:var(--au);margin-bottom:.6rem}
 .schDay label{font-size:.9rem;color:var(--mu)}
@@ -160,7 +159,7 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .qKaaba{width:84px;height:84px;margin:0 auto 1rem;position:relative;border-radius:8px 8px 13px 13px;background:linear-gradient(145deg,#252a35,#090b12);border:3px solid #d8b65e;box-shadow:0 12px 25px rgba(0,0,0,.25);overflow:hidden}
 .qKaaba:before{content:"";position:absolute;left:0;right:0;top:18px;height:13px;background:linear-gradient(90deg,#b18a39,#f4d27a,#a77a2b);border-block:2px solid #f5dc98}
 .qKaaba:after{content:"";position:absolute;left:34px;top:42px;width:16px;height:26px;border:2px solid #d8b65e;border-radius:9px 9px 2px 2px}
-@media(max-width:800px){#profileFloat{top:10px;left:10px;width:44px;height:44px}#profileFloat img{width:36px;height:36px}.hero{padding-top:3.5rem}.cal div{min-height:58px}}
+@media(max-width:800px){.profileFloat{top:10px;left:10px;width:44px;height:44px}.profileFloat img{width:36px;height:36px}.hero{padding-top:3.5rem}.cal div{min-height:58px}}
 
 </style>
 </head>
@@ -201,11 +200,11 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
 <div id="adMod" class="hide"><div class="box"><img src="icon-48.png" width="48" height="48" alt=""><h2 id="adT"></h2><p>حيّ على الصلاة، حيّ على الفلاح</p><div class="row" style="justify-content:center"><button id="adStop" class="gold">إيقاف الصوت</button><button id="adOk" class="alt">حسنًا</button></div></div></div>
 
 <div id="app" class="hide">
-<button id="profileFloat" class="alt" data-p="settings" aria-label="الملف الشخصي" title="الملف الشخصي"><img src="icon-48.png" alt=""></button>
 <nav id="nav"></nav><div id="ov"></div>
 <main>
 <section id="dash" class="pg">
   <div class="hero">
+    <button id="profileFloat" class="profileFloat" data-p="settings" aria-label="الملف الشخصي" title="الملف الشخصي"><img src="icon-48.png" alt=""></button>
     <svg class="bgstar" viewBox="-100 -100 200 200" style="color:#fff"><use href="#star"/></svg>
     <div><p id="dates"></p><h2>السلام عليكم ورحمة الله</h2><p>آخر قراءة: <b id="dLast">—</b></p>
       <div class="row" style="margin-top:.8rem"><button class="gold" data-p="quran">تابع القراءة</button></div></div>
@@ -260,10 +259,9 @@ if(!window.__ready){document.getElementById('authV').classList.remove('hide');va
     <div class="row" style="margin-top:.7rem"><button id="dlAll" class="alt">حفظ المصحف كاملًا للقراءة بدون إنترنت</button></div>
     <div class="bar" style="margin-top:.7rem"><i id="dlBar" style="width:0"></i></div><div class="mu" id="dlTxt"></div>
   </div>
-  <div class="card page"><h3 id="sTitle" style="text-align:center;font-size:1.7rem">اختر سورة</h3><div class="mu" id="sMeta" style="text-align:center"></div><div id="bsm" class="bsm"></div><div id="qBox" class="quran"></div>
+  <div class="card page"><h3 id="sTitle" style="text-align:center;font-size:1.7rem">اختر سورة</h3><div class="mu" id="sMeta" style="text-align:center"></div><div id="bsm" class="bsm"></div><div id="qBox" class="quran"></div><div id="abar"><button id="aPlay">استماع</button><button id="aImg" class="gold">حفظ صورة</button><button id="aHere" class="alt">وصلت هنا</button><button id="aFav" class="alt">مفضلة</button><button id="aCopy" class="alt">نسخ</button><button id="aShare" class="alt">مشاركة</button></div>
     <div class="row" style="margin-top:1rem"><button id="sDone" class="gold">أتممت السورة</button><button id="prevS" class="alt">السورة السابقة</button><button id="nextS" class="alt">السورة التالية</button></div></div>
 </section>
-<div id="abar"><button id="aPlay">استماع</button><button id="aImg" class="gold">حفظ صورة</button><button id="aHere" class="alt">وصلت هنا</button><button id="aFav" class="alt">مفضلة</button><button id="aCopy" class="alt">نسخ</button><button id="aShare" class="alt">مشاركة</button></div>
 
 <section id="fav" class="pg hide"><h2>الآيات المفضلة</h2><div id="favList"></div></section>
 
@@ -390,7 +388,7 @@ const icon=k=>`<svg class="ic" viewBox="0 0 24 24"><path d="${IC[k]}"/></svg>`;
 const LBL=Object.fromEntries(MENU.flatMap(g=>g[1]));
 $('nav').innerHTML=`<div class="brand"><img src="icon-48.png" alt="">سَكينة</div>`+MENU.map(g=>`<div class="grp">${g[0]}</div>`+g[1].map(i=>`<button data-p="${i[0]}">${icon(i[0])}${i[1]}</button>`).join('')).join('')+`<button id="out" class="alt" style="margin-top:auto">${icon('out')}تسجيل الخروج</button>`;
 $('bnav').innerHTML=['dash','prayer','quran','sched'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k].replace('مواقيت ','')}</button>`).join('')+`<button id="moreB">${icon('more')}المزيد</button>`;
-$('tiles').innerHTML=['quran','adhkar','hadith','khatma','sched','ptrack','tasbih','qibla'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k]||({ptrack:'متابعة الصلوات',tasbih:'السبحة',qibla:'اتجاه القبلة'}[k])}</button>`).join('');
+$('tiles').innerHTML=['quran','adhkar','hadith','wird','fav','khatma','sched','ptrack','tasbih','qibla','cal','goals'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k]||({ptrack:'متابعة الصلوات',tasbih:'السبحة',qibla:'اتجاه القبلة'}[k])}</button>`).join('');
 const drawer=o=>{$('nav').classList.toggle('open',o);$('ov').classList.toggle('on',o)};
 $('moreB').onclick=()=>drawer(true);$('ov').onclick=()=>drawer(false);
 
@@ -422,8 +420,8 @@ async function boot(u){
   applyTheme(S.theme||curTheme());
   $('city').value=S.city||'Doha';$('country').value=S.country||'Qatar';$('method').value=S.method||'10';$('nOn').checked=!!S.notify;$('sMail').textContent=u.email;
   $('vol').value=S.vol??.7;$('adMode').value=S.adMode||'adhan';$('reciter').value=S.reciter||'ar.minshawi';
-  const f=S.qfont||'Amiri Quran';$('qFont').value=f;document.documentElement.style.setProperty('--qfam',`'${f}'`);
-  if(S.qsize){$('fs').value=S.qsize;document.documentElement.style.setProperty('--qf',S.qsize+'px')}
+  const f=localStorage.getItem('sk_qfont')||S.qfont||'Amiri Quran';$('qFont').value=f;document.documentElement.style.setProperty('--qfam',`'${f}'`);
+  const qz=localStorage.getItem('sk_qsize')||S.qsize;if(qz){$('fs').value=qz;document.documentElement.style.setProperty('--qf',qz+'px')}if(localStorage.getItem('sk_reciter'))$('reciter').value=localStorage.getItem('sk_reciter');
   initLists();
    try{$('contPlay').checked=localStorage.getItem('sk_contPlay')==='1'}catch(e){}
    show('app');go('dash');loadPrayer(true);
@@ -1018,7 +1016,9 @@ const st=document.createElement('style');st.textContent=`
 .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--au);display:block;margin:0 0 .6rem;background:var(--card)}
 #tfBox .tx{white-space:pre-wrap;font-size:1.1rem;line-height:2.1}
 .sch{width:100%;border-collapse:collapse}.sch th,.sch td{padding:.35rem;border-bottom:1px solid var(--bd);text-align:right}
-.sch input{margin:0;min-width:110px}.sch tr.td{background:rgba(236,188,88,.16)}.schW{overflow-x:auto}`;document.head.appendChild(st);
+.sch input{margin:0;min-width:0}.sch tr.td{background:rgba(236,188,88,.16)}.schW{width:100%;overflow:visible}
+.schTable{width:100%;border-collapse:separate;border-spacing:0 5px;table-layout:fixed;font-size:.9rem}.schTable th{color:var(--au);font-weight:800;padding:.35rem .25rem}.schTable td{background:var(--card);border-block:1px solid var(--bd);padding:.35rem .25rem;vertical-align:middle}.schTable td:first-child{border-right:1px solid var(--bd);border-radius:0 10px 10px 0;font-weight:800;width:12%}.schTable td:last-child{border-left:1px solid var(--bd);border-radius:10px 0 0 10px}.schTable input[type=text]{width:100%;padding:.35rem .4rem;font-size:.82rem;margin:0;border-radius:8px}.prayerChecks{display:flex;justify-content:center;gap:.3rem;flex-wrap:wrap}.prayerChecks label{display:inline-flex;align-items:center;gap:2px;font-size:.72rem;white-space:nowrap;color:var(--mu)}.prayerChecks input{width:14px;height:14px;margin:0;accent-color:var(--pri)}.schDate{display:block;font-size:.68rem;color:var(--mu);font-weight:500}.schView .prayerChecks{justify-content:flex-start}
+@media(max-width:650px){.schTable{font-size:.75rem}.schTable th{font-size:.68rem}.schTable td{padding:.25rem .15rem}.schTable td:first-child{width:15%}.schTable input[type=text]{font-size:.7rem;padding:.3rem .2rem}.prayerChecks{gap:.18rem}.prayerChecks label{font-size:.62rem;gap:1px}.prayerChecks input{width:12px;height:12px}}`;document.head.appendChild(st);
 /* ---------- الإعدادات: خط + صورة ---------- */
 const sset=$('settings');
 const card=document.createElement('div');card.className='card';
@@ -1026,6 +1026,19 @@ card.innerHTML=`<h3>الصورة الشخصية</h3><img id="avImg" class="avata
 <div class="row"><button id="avSave">حفظ الصورة</button><button id="avDel" class="alt">حذف الصورة</button></div>
 `;
 sset.appendChild(card);
+const pref=document.createElement('div');pref.className='card';pref.innerHTML=`<h3>تفضيلات القراءة</h3>
+<div class="grid">
+<label>خط المصحف<select id="spFont"><option value="Amiri Quran">أميري قرآن</option><option value="Scheherazade New">شهرزاد</option><option value="Noto Naskh Arabic">نسخ</option></select></label>
+<label>حجم خط المصحف<input id="spSize" type="range" min="22" max="54" value="30"></label>
+<label>القارئ المفضل<select id="spRec"><option value="ar.minshawi">محمد صديق المنشاوي</option><option value="ar.alafasy">مشاري العفاسي</option><option value="ar.husary">محمود خليل الحصري</option><option value="ar.abdulbasitmurattal">عبد الباسط عبد الصمد</option><option value="ar.abdurrahmaansudais">عبد الرحمن السديس</option><option value="ar.mahermuaiqly">ماهر المعيقلي</option></select></label>
+</div>
+<label class="row" style="margin:.5rem 0"><input id="spCont" type="checkbox" style="width:18px;margin:0"> تشغيل الآيات التالية تلقائيًا</label>
+<div class="row"><button id="spSave">حفظ التفضيلات</button><button id="spNotify" class="alt">تفعيل إشعارات الصلاة</button></div><p class="mu" id="spMsg">تُحفظ هذه التفضيلات على هذا الجهاز.</p>`;
+sset.appendChild(pref);
+const syncPrefs=()=>{try{$('spFont').value=localStorage.getItem('sk_qfont')||$('qFont').value||'Amiri Quran';$('spSize').value=localStorage.getItem('sk_qsize')||$('fs').value||30;$('spRec').value=localStorage.getItem('sk_reciter')||$('reciter').value||'ar.minshawi';$('spCont').checked=localStorage.getItem('sk_contPlay')==='1'}catch(e){}};
+syncPrefs();
+$('spSave').onclick=()=>{const f=$('spFont').value,z=$('spSize').value,r=$('spRec').value;try{localStorage.setItem('sk_qfont',f);localStorage.setItem('sk_qsize',z);localStorage.setItem('sk_reciter',r);localStorage.setItem('sk_contPlay',$('spCont').checked?'1':'0')}catch(e){}$('qFont').value=f;$('fs').value=z;$('reciter').value=r;$('contPlay').checked=$('spCont').checked;document.documentElement.style.setProperty('--qfam',`'${f}'`);document.documentElement.style.setProperty('--qf',z+'px');toast('تم حفظ تفضيلات القراءة')};
+$('spNotify').onclick=async()=>{if(!('Notification'in window))return toast('المتصفح لا يدعم الإشعارات',1);const p=await Notification.requestPermission();$('spMsg').textContent=p==='granted'?'تم السماح بالإشعارات على هذا الجهاز.':'لم يتم السماح بالإشعارات.'};
 let newPhoto='';
 $('avIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
   im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),s=Math.min(im.width,im.height);
@@ -1070,54 +1083,43 @@ const tfText=()=>`${$('tfAy').textContent}\n\n${$('tfTx').textContent}\n\n(${$('
 $('tfC').onclick=()=>navigator.clipboard.writeText(tfText()).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1));
 $('tfSh').onclick=()=>navigator.share?navigator.share({text:tfText()}).catch(()=>{}):$('tfC').click();
 
-/* ---------- الجدول الأسبوعي: تحرير وحفظ وعرض ---------- */
+/* ---------- الجدول الأسبوعي: جدول واحد مختصر للأيام والصلوات ---------- */
 const ar=n=>Number(n).toLocaleString('ar-EG',{useGrouping:false});
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const PRAYERS=[['f','فجر'],['d','ظهر'],['a','عصر'],['m','مغرب'],['i','عشاء']];
 const mk=(id,html)=>{const s=document.createElement('section');s.id=id;s.className='pg hide';s.innerHTML=html;document.querySelector('main').appendChild(s)};
 mk('sched',`<div class="row" style="justify-content:space-between;align-items:center"><h2>جدولي الأسبوعي</h2><span class="mu" id="schStatus">غير محفوظ</span></div>
-<p class="mu">رتّب مهامك القرآنية لكل يوم، ثم احفظ الجدول للرجوع إليه في أي وقت.</p>
-<div class="schSaved"><div><b id="schSavedTitle">لا يوجد جدول محفوظ بعد</b><div class="mu" id="schSavedMeta">احفظ جدولك ليظهر هنا</div></div>
+<p class="mu">جدول واحد للأسبوع كله: مهامك اليومية ومتابعة الصلوات في نفس الصف، من غير قوائم منفصلة أو تمرير داخل الجدول.</p>
+<div class="schSaved"><div><b id="schSavedTitle">لا يوجد جدول محفوظ بعد</b><div class="mu" id="schSavedMeta">اكتب خطتك ثم احفظها</div></div>
 <div class="row"><button id="schView" class="alt" disabled>عرض الجدول</button><button id="schEdit" class="alt hide">تعديل الجدول</button></div></div>
-<div class="card" id="schEditor"><div id="schB"></div><div class="row" style="justify-content:flex-start;margin-top:1rem"><button id="schSave">حفظ الجدول</button></div></div>
+<div class="card" id="schEditor"><div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الصلوات</th><th>حفظ</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody id="schB"></tbody></table></div><div class="row" style="justify-content:flex-start;margin-top:1rem"><button id="schSave">حفظ الجدول</button></div></div>
 <div class="card schView hide" id="schViewer"><div class="row" style="justify-content:space-between"><h3>الجدول المحفوظ</h3><span class="mu" id="schViewDate"></span></div><div id="schViewBody"></div></div>`);
 let schData={},schSavedAt=null;
+function weekDate(i){const d=new Date();d.setDate(d.getDate()-d.getDay()+i);return d}
+function prayerInputs(i,x,disabled=false){return `<div class="prayerChecks">${PRAYERS.map(([k,n])=>`<label title="${n}"><input type="checkbox" data-pr="${k}" data-d="${i}" ${x.p?.[k]?'checked':''} ${disabled?'disabled':''}>${n}</label>`).join('')}</div>`}
 function renderSchEditor(){
-  $('schB').innerHTML=DAYS.map((d,i)=>{const x=schData[i]||{};return `<div class="schDay"><h3><span>${['☀️','🌿','📘','✨','🌙','🕌','⭐'][i]}</span>${d}</h3>
-  <label>حفظ جديد<input data-d="${i}" data-k="h" value="${esc(x.h||'')}" placeholder="اكتب ما تريد حفظه"></label>
-  <label>مراجعة<input data-d="${i}" data-k="m" value="${esc(x.m||'')}" placeholder="اكتب ما تريد مراجعته"></label>
-  <label>الورد اليومي<input data-d="${i}" data-k="w" value="${esc(x.w||'')}" placeholder="اكتب وردك اليومي"></label></div>`}).join('');
+  $('schB').innerHTML=DAYS.map((d,i)=>{const x=schData[i]||{},date=weekDate(i);return `<tr><td>${d}<span class="schDate">${date.toLocaleDateString('ar',{day:'numeric',month:'numeric'})}</span></td><td>${prayerInputs(i,x)}</td><td><input type="text" data-d="${i}" data-k="h" value="${esc(x.h||'')}" placeholder="حفظ"></td><td><input type="text" data-d="${i}" data-k="m" value="${esc(x.m||'')}" placeholder="مراجعة"></td><td><input type="text" data-d="${i}" data-k="w" value="${esc(x.w||'')}" placeholder="الورد"></td></tr>`}).join('');
 }
 async function loadSch(){
-  try{
-    const snap=await get(R('schedule'));const data=snap.val()||{};
-    schData=data.days||data;schSavedAt=data.savedAt||null;
-    const has=Object.values(schData).some(x=>x&&typeof x==='object'&&Object.values(x).some(Boolean));
-    $('schSavedTitle').textContent=has?'جدولك الأسبوعي محفوظ':'لا يوجد جدول محفوظ بعد';
-    $('schSavedMeta').textContent=schSavedAt?'آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar'):'احفظ جدولك ليظهر هنا';
-    $('schView').disabled=!has;$('schEdit').classList.toggle('hide',!has);
-    $('schStatus').textContent=has?'محفوظ':'غير محفوظ';
-    renderSchEditor();
+  try{const snap=await get(R('schedule'));const data=snap.val()||{};schData=data.days||data;schSavedAt=data.savedAt||null;
+    const has=Object.values(schData).some(x=>x&&typeof x==='object'&&(!!(x.h||x.m||x.w)||Object.values(x.p||{}).some(Boolean)));
+    $('schSavedTitle').textContent=has?'جدولك الأسبوعي محفوظ':'لا يوجد جدول محفوظ بعد';$('schSavedMeta').textContent=schSavedAt?'آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar'):'اكتب خطتك ثم احفظها';
+    $('schView').disabled=!has;$('schEdit').classList.toggle('hide',!has);$('schStatus').textContent=has?'محفوظ':'غير محفوظ';renderSchEditor();
   }catch(e){toast('تعذّر تحميل الجدول',1)}
 }
 $('schSave').onclick=async()=>{
   const o={};
-  $$('#schB input[data-k]').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{})[i.dataset.k]=i.value.trim()});
-  const has=Object.values(o).some(day=>Object.values(day).some(v=>v));
-  if(!has)return toast('اكتب مهمة واحدة على الأقل قبل الحفظ',1);
-  const payload={days:o,savedAt:Date.now()};
-  try{
-    await set(R('schedule'),payload);schData=o;schSavedAt=payload.savedAt;
-    $('schSavedTitle').textContent='جدولك الأسبوعي محفوظ';
-    $('schSavedMeta').textContent='آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar');
-    $('schView').disabled=false;$('schEdit').classList.remove('hide');
-    $('schStatus').textContent='تم الحفظ';toast('تم حفظ الجدول الأسبوعي');
-    renderSchView();
-  }catch(e){toast('تعذّر حفظ الجدول',1)}
+  $$('#schB input[data-k]').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{} )[i.dataset.k]=i.value.trim()});
+  $$('#schB input[data-pr]').forEach(i=>{const day=o[i.dataset.d]=o[i.dataset.d]||{};day.p=day.p||{};day.p[i.dataset.pr]=i.checked});
+  const has=Object.values(o).some(day=>Object.values(day).some(v=>typeof v==='object'?Object.values(v).some(Boolean):!!v));
+  if(!has)return toast('أضف مهمة أو حدّد صلاة واحدة على الأقل',1);
+  const payload={days:o,savedAt:Date.now(),weekStart:ymd(weekDate(0))};
+  try{await set(R('schedule'),payload);schData=o;schSavedAt=payload.savedAt;$('schSavedTitle').textContent='جدولك الأسبوعي محفوظ';$('schSavedMeta').textContent='آخر حفظ: '+new Date(schSavedAt).toLocaleString('ar');$('schView').disabled=false;$('schEdit').classList.remove('hide');$('schStatus').textContent='تم الحفظ';toast('تم حفظ الجدول الأسبوعي');renderSchView()}
+  catch(e){toast('تعذّر حفظ الجدول',1)}
 };
 function renderSchView(){
-  $('schViewBody').innerHTML=DAYS.map((d,i)=>{const x=schData[i]||{},rows=[['حفظ جديد',x.h],['مراجعة',x.m],['الورد اليومي',x.w]].filter(r=>r[1]);
-    return `<div class="schDay"><h3>${d}</h3>${rows.length?rows.map(r=>`<p><span class="mu">${r[0]}:</span> <b>${esc(r[1])}</b></p>`).join(''):'<p class="mu">لا توجد مهام مسجلة لهذا اليوم</p>'}</div>`}).join('');
+  $('schViewBody').innerHTML=`<div class="schW"><table class="schTable"><thead><tr><th>اليوم</th><th>الصلوات</th><th>حفظ</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody>${DAYS.map((d,i)=>{const x=schData[i]||{};return `<tr><td>${d}</td><td>${prayerInputs(i,x,true)}</td><td>${esc(x.h||'—')}</td><td>${esc(x.m||'—')}</td><td>${esc(x.w||'—')}</td></tr>`}).join('')}</tbody></table></div>`;
   $('schViewDate').textContent=schSavedAt?new Date(schSavedAt).toLocaleDateString('ar'):'';
 }
 $('schView').onclick=()=>{renderSchView();$('schViewer').classList.remove('hide');$('schEditor').classList.add('hide')};
@@ -1131,8 +1133,9 @@ async function loadDash(){
   if(!auth.currentUser)return;const t=new Date().getDay(),d=ymd(new Date());let v={},dn={},pl={};
   try{const all=(await get(R('schedule'))).val()||{};v=all.days||all;pl=(await get(R('prayerLog',d))).val()||{}}catch(e){}
   const todayPlan=v[t]||{};
-  const rows=[['h','حفظ جديد'],['m','مراجعة'],['w','الورد']].filter(r=>todayPlan[r[0]]).map(r=>`<div style="margin:.35rem 0"><b>${r[1]}:</b> ${esc(todayPlan[r[0]])}</div>`).join('')||'<span class="mu">لا توجد مهام مسجلة لهذا اليوم.</span>';
-  $('dSch').innerHTML=rows+`<div class="mu" style="margin-top:.5rem">الصلوات المسجلة: ${ar(Object.values(pl).filter(Boolean).length)} من ${ar(5)}</div>`;
+  const rows=[['h','حفظ جديد'],['m','مراجعة'],['w','الورد']].filter(r=>todayPlan[r[0]]).map(r=>`<div style="margin:.25rem 0"><b>${r[1]}:</b> ${esc(todayPlan[r[0]])}</div>`).join('')||'<span class="mu">لا توجد مهام مسجلة لهذا اليوم.</span>';
+  const pDone=Object.values(todayPlan.p||{}).filter(Boolean).length;
+  $('dSch').innerHTML=rows+`<div class="mu" style="margin-top:.5rem">صلوات الجدول: ${ar(pDone)} من ${ar(5)}</div><div class="mu">متابعة الصلوات اليومية: ${ar(Object.values(pl).filter(Boolean).length)} من ${ar(5)}</div>`;
   let c;try{c=JSON.parse(localStorage.getItem('sk_ay'))}catch(e){}
   if(!c||c.d!==d){const n=(Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/864e5)*37)%6236+1;
     try{const j=(await(await fetch(`https://api.alquran.cloud/v1/ayah/${n}/quran-uthmani`)).json()).data;c={d,t:j.text,m:`${j.surah.name} — آية ${ar(j.numberInSurah)}`};localStorage.setItem('sk_ay',JSON.stringify(c))}catch(e){c=null}}
