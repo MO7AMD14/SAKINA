@@ -350,17 +350,17 @@ const IC={
  adhkar:'M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6-5.3-3-5.3 3 1.2-6L3.4 9.3l6-.7z',hadith:'M5 4h14v16H5zM9 8h6M9 12h6M9 16h4',
  wird:'M20 14a8 8 0 1 1-10-10 6 6 0 0 0 10 10z',khatma:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z',hifz:'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',
  goals:'M5 21V4M5 4h12l-2 4 2 4H5',notes:'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7',stats:'M4 20V10M10 20V4M16 20v-8M22 20H2',
- settings:'M4 7h10M18 7h2M4 17h2M10 17h10M16 5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM8 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4z',out:'M9 4H5v16h4M16 8l4 4-4 4M20 12H9',more:'M4 6h16M4 12h16M4 18h16'};
+ settings:'M4 7h10M18 7h2M4 17h2M10 17h10M16 5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM8 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4z',out:'M9 4H5v16h4M16 8l4 4-4 4M20 12H9',more:'M4 6h16M4 12h16M4 18h16',sched:'M4 5h16v15H4zM4 10h16M10 10v10',zakat:'M12 3v18M7 8c0-2 2-3 5-3s5 1 5 3-2 3-5 3-5 1-5 3 2 3 5 3 5-1 5-3'};
 const MENU=[['الرئيسي',[['dash','الرئيسية'],['prayer','مواقيت الصلاة'],['cal','التقويم']]],
  ['القرآن والعلم',[['quran','المصحف'],['fav','الآيات المفضلة'],['adhkar','الأذكار والأدعية'],['hadith','الأحاديث']]],
- ['العبادات',[['wird','الورد اليومي'],['khatma','خطط الختمة'],['hifz','الحفظ والمراجعة']]],
- ['متابعتي',[['goals','أهدافي'],['notes','ملاحظاتي'],['stats','الإحصائيات']]],
+ ['العبادات',[['sched','جدولي الأسبوعي'],['khatma','خطط الختمة']]],
+ ['أدوات',[['zakat','حاسبة الزكاة']]],
  ['حسابي',[['settings','الإعدادات']]]];
 const icon=k=>`<svg class="ic" viewBox="0 0 24 24"><path d="${IC[k]}"/></svg>`;
 const LBL=Object.fromEntries(MENU.flatMap(g=>g[1]));
 $('nav').innerHTML=`<div class="brand"><img src="icon-48.png" alt="">سَكينة</div>`+MENU.map(g=>`<div class="grp">${g[0]}</div>`+g[1].map(i=>`<button data-p="${i[0]}">${icon(i[0])}${i[1]}</button>`).join('')).join('')+`<button id="out" class="alt" style="margin-top:auto">${icon('out')}تسجيل الخروج</button>`;
-$('bnav').innerHTML=['dash','prayer','quran','wird'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k].replace('مواقيت ','')}</button>`).join('')+`<button id="moreB">${icon('more')}المزيد</button>`;
-$('tiles').innerHTML=['quran','adhkar','hadith','khatma','hifz','goals'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k]}</button>`).join('');
+$('bnav').innerHTML=['dash','prayer','quran','sched'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k].replace('مواقيت ','')}</button>`).join('')+`<button id="moreB">${icon('more')}المزيد</button>`;
+$('tiles').innerHTML=['quran','adhkar','hadith','khatma','sched','zakat'].map(k=>`<button data-p="${k}">${icon(k)}${LBL[k]}</button>`).join('');
 const drawer=o=>{$('nav').classList.toggle('open',o);$('ov').classList.toggle('on',o)};
 $('moreB').onclick=()=>drawer(true);$('ov').onclick=()=>drawer(false);
 
@@ -1037,25 +1037,50 @@ const tfText=()=>`${$('tfAy').textContent}\n\n${$('tfTx').textContent}\n\n(${$('
 $('tfC').onclick=()=>navigator.clipboard.writeText(tfText()).then(()=>toast('تم النسخ'),()=>toast('تعذّر النسخ',1));
 $('tfSh').onclick=()=>navigator.share?navigator.share({text:tfText()}).catch(()=>{}):$('tfC').click();
 
-/* ---------- الجدول الأسبوعي ---------- */
-const DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-const s2=document.createElement('section');s2.id='sched';s2.className='pg hide';
-s2.innerHTML=`<h2>جدولي الأسبوعي</h2><p class="help">اكتب لكل يوم ما ستحفظه وما ستراجعه وورده، مثل «البقرة ١–١٠». يُظهر الجدول يوم اليوم بلون مميز، وتقدر تعلّم إنجازه.</p>
-<div class="card"><div class="schW"><table class="sch"><thead><tr><th>اليوم</th><th>حفظ جديد</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody id="schB"></tbody></table></div>
-<div class="row" style="margin-top:.8rem"><button id="schSave">حفظ الجدول</button><label class="row" style="margin:0"><input type="checkbox" id="schDone" style="margin:0"> أنجزت جدول اليوم</label></div></div>`;
-document.querySelector('main').appendChild(s2);
-const out=$('out'),g=document.createElement('div');g.className='grp';g.textContent='التنظيم';out.before(g);
-const nb=document.createElement('button');nb.dataset.p='sched';nb.innerHTML=ic('M4 5h16v15H4zM4 10h16M10 10v10')+'جدولي الأسبوعي';out.before(nb);
+/* ---------- الجدول الأسبوعي (حفظ + مراجعة + ورد) ---------- */
+const ar=n=>Number(n).toLocaleString('ar-EG',{useGrouping:false});
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const mk=(id,html)=>{const s=document.createElement('section');s.id=id;s.className='pg hide';s.innerHTML=html;document.querySelector('main').appendChild(s)};
+const st2=document.createElement('style');st2.textContent=`@media(max-width:800px){.sch thead{display:none}.sch,.sch tbody,.sch tr,.sch td{display:block;width:100%}.sch tr{border:1px solid var(--bd);border-radius:14px;padding:.5rem;margin-bottom:.7rem}.sch td{border:0}.sch td::before{content:attr(data-label);display:block;color:var(--mu);font-size:.8rem}.sch input:not([type=checkbox]){width:100%}}`;document.head.appendChild(st2);
+mk('sched',`<h2>جدولي الأسبوعي</h2><p class="help">اكتب لكل يوم ما ستحفظه وما ستراجعه وورده من القرآن، مثل «البقرة ١–١٠». يوم اليوم فيه خانات «تم» لتعلّم إنجازك، وتظهر مهام اليوم في الصفحة الرئيسية.</p>
+<div class="card"><table class="sch"><thead><tr><th>اليوم</th><th>حفظ جديد</th><th>مراجعة</th><th>الورد</th></tr></thead><tbody id="schB"></tbody></table>
+<div class="row" style="margin-top:.8rem"><button id="schSave">حفظ الجدول</button></div></div>`);
 async function loadSch(){
-  const t=new Date().getDay();let v={},dn=false;
-  try{v=(await get(R('schedule'))).val()||{};dn=!!(await get(R('scheduleDone',ymd(new Date())))).val()}catch(e){toast('تعذّر تحميل الجدول',1)}
-  $('schB').innerHTML=DAYS.map((d,i)=>{const x=v[i]||{};return `<tr class="${i===t?'td':''}"><td><b>${d}</b></td>${['h','m','w'].map(k=>`<td><input data-d="${i}" data-k="${k}" value="${esc(x[k]||'')}"></td>`).join('')}</tr>`}).join('');
-  $('schDone').checked=dn}
-$('schSave').onclick=async()=>{const o={};$$('#schB input').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{})[i.dataset.k]=i.value.trim()});
+  const t=new Date().getDay(),L={h:'حفظ جديد',m:'مراجعة',w:'الورد'};let v={},dn={};
+  try{v=(await get(R('schedule'))).val()||{};dn=(await get(R('scheduleDone',ymd(new Date())))).val()||{}}catch(e){toast('تعذّر تحميل الجدول',1)}
+  $('schB').innerHTML=DAYS.map((d,i)=>{const x=v[i]||{};return `<tr class="${i===t?'td':''}"><td data-label="اليوم"><b>${d}${i===t?' (اليوم)':''}</b></td>${['h','m','w'].map(k=>`<td data-label="${L[k]}"><input data-d="${i}" data-k="${k}" value="${esc(x[k]||'')}" placeholder="مثال: البقرة ١–١٠">${i===t?`<label class="row"><input type="checkbox" data-c="${k}" ${dn[k]?'checked':''} style="margin:0"> تم</label>`:''}</td>`).join('')}</tr>`}).join('');
+  $$('#schB [data-c]').forEach(c=>c.onchange=async()=>{try{await set(R('scheduleDone',ymd(new Date()),c.dataset.c),c.checked?true:null)}catch(e){toast('تعذّر الحفظ',1)}})}
+$('schSave').onclick=async()=>{const o={};$$('#schB input[data-k]').forEach(i=>{(o[i.dataset.d]=o[i.dataset.d]||{})[i.dataset.k]=i.value.trim()});
   try{await set(R('schedule'),o);toast('تم حفظ الجدول')}catch(e){toast('تعذّر الحفظ',1)}};
-$('schDone').onchange=async e=>{try{await set(R('scheduleDone',ymd(new Date())),e.target.checked?true:null)}catch(x){toast('تعذّر الحفظ',1)}};
-document.addEventListener('click',e=>{if(e.target.closest('[data-p="sched"]'))setTimeout(loadSch,0)});
+
+/* ---------- الرئيسية: جدول اليوم + آية اليوم ---------- */
+['dWird','dRev'].forEach(id=>$(id)?.closest('.card')?.classList.add('hide'));
+const gr=document.querySelector('#dash .grid');
+gr.insertAdjacentHTML('afterbegin',`<div class="card"><div class="mu">جدول اليوم</div><div id="dSch">…</div><button class="alt" data-p="sched" style="margin-top:.6rem">افتح الجدول</button></div>
+<div class="card" style="grid-column:1/-1"><div class="mu">آية اليوم</div><div class="qtxt" id="dAyT">…</div><div class="mu" id="dAyM"></div></div>`);
+async function loadDash(){
+  if(!auth.currentUser)return;const t=new Date().getDay(),d=ymd(new Date());let v={},dn={},pl={};
+  try{v=(await get(R('schedule',t))).val()||{};dn=(await get(R('scheduleDone',d))).val()||{};pl=(await get(R('prayerLog',d))).val()||{}}catch(e){}
+  const rows=[['h','حفظ'],['m','مراجعة'],['w','ورد']].filter(r=>v[r[0]]).map(r=>`<div>${dn[r[0]]?'تم — ':''}<b>${r[1]}:</b> ${esc(v[r[0]])}</div>`).join('')||'<span class="mu">لم تكتب جدول اليوم بعد.</span>';
+  $('dSch').innerHTML=rows+`<div class="mu" style="margin-top:.4rem">الصلوات اليوم: ${ar(Object.values(pl).filter(Boolean).length)} من ${ar(5)}</div>`;
+  let c;try{c=JSON.parse(localStorage.getItem('sk_ay'))}catch(e){}
+  if(!c||c.d!==d){const n=(Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/864e5)*37)%6236+1;
+    try{const j=(await(await fetch(`https://api.alquran.cloud/v1/ayah/${n}/quran-uthmani`)).json()).data;c={d,t:j.text,m:`${j.surah.name} — آية ${ar(j.numberInSurah)}`};localStorage.setItem('sk_ay',JSON.stringify(c))}catch(e){c=null}}
+  $('dAyT').textContent=c?c.t:'تعذّر تحميل الآية';$('dAyM').textContent=c?c.m:''}
+onAuthStateChanged(auth,u=>{if(u)setTimeout(loadDash,1500)});
+
+/* ---------- حاسبة الزكاة ---------- */
+mk('zakat',`<h2>حاسبة الزكاة</h2><p class="help">النصاب 85 جرامًا من الذهب عيار 24، والنسبة 2.5٪ بشرط مرور سنة هجرية على المال. الحساب للتقدير، وللفتوى راجع أهل العلم.</p>
+<div class="card"><div class="grid"><label>سعر جرام الذهب عيار 24 (بعملتك)<input id="zP" inputmode="decimal"></label><label>النقد والمدخرات<input id="zC" inputmode="decimal"></label><label>الذهب الذي تملكه (بالجرام)<input id="zG" inputmode="decimal"></label><label>ديون حالّة عليك<input id="zD" inputmode="decimal"></label></div>
+<button id="zGo">احسب</button><div class="big" id="zR" style="margin-top:.8rem"></div><p class="mu" id="zM"></p></div>`);
+const zn=id=>parseFloat(String($(id).value).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace('٫','.').replace(',','.'))||0;
+$('zGo').onclick=()=>{const p=zn('zP');if(p<=0)return toast('اكتب سعر جرام الذهب',1);
+  const tot=zn('zC')+zn('zG')*p-zn('zD'),nis=85*p;
+  $('zR').textContent=tot>=nis?'الزكاة: '+ar((tot*0.025).toFixed(2)):'لم يبلغ النصاب';
+  $('zM').textContent=`إجمالي مالك بعد الديون: ${ar(tot.toFixed(2))} — النصاب: ${ar(nis.toFixed(2))}`};
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;if(b.dataset.p==='sched')setTimeout(loadSch,0);if(b.dataset.p==='dash')setTimeout(loadDash,0)});
 </script>
 </body>
 </html>
