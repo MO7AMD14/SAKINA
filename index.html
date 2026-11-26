@@ -13,13 +13,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>try{if(localStorage.getItem('sk_theme')==='light')document.documentElement.classList.add('light')}catch(e){}</script>
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Tajawal:wght@400;500;700;800&family=Noto+Naskh+Arabic:wght@400;600&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;--bg:#080d26;--bg2:#0f1740;--card:rgba(255,255,255,.06);--bd:rgba(255,255,255,.13);--tx:#eef1fb;--mu:#a9b2d6;--pri:#3fc1b0;--lap:#2a50c8;--au:#ecbc58;--er:#ff6b6b;--sh:0 10px 40px rgba(0,0,0,.35)}
 :root.light{color-scheme:light;--bg:#eef2f8;--bg2:#ffffff;--card:#ffffff;--bd:#d6dfee;--tx:#0f1a3d;--mu:#55648c;--pri:#0e8f84;--au:#a9791c;--er:#c93a3a;--sh:0 8px 28px rgba(30,50,110,.13)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{accent-color:var(--pri)}
-body{margin:0;overflow-x:hidden;font-family:'Cairo',Tahoma,Arial,sans-serif;font-size:16px;color:var(--tx);line-height:1.8;background:var(--bg);
+body{margin:0;overflow-x:hidden;font-family:'Tajawal',Tahoma,Arial,sans-serif;font-size:17px;color:var(--tx);line-height:1.85;background:var(--bg);
  background-image:radial-gradient(900px 500px at 85% -10%,rgba(42,80,200,.35),transparent),radial-gradient(700px 500px at 0% 100%,rgba(63,193,176,.15),transparent);background-attachment:fixed}
 :root.light body{background-image:radial-gradient(900px 500px at 85% -10%,rgba(42,80,200,.12),transparent),radial-gradient(700px 500px at 0% 100%,rgba(14,143,132,.1),transparent)}
 h1,h2,h3{font-weight:700;margin:.2rem 0 .6rem;line-height:1.4}h2{font-size:1.7rem}h3{font-size:1.15rem}
@@ -59,13 +59,13 @@ button.chip{padding:.2rem .8rem;font-size:.85rem;border-radius:99px}
 .box{position:relative;width:min(430px,100%);padding:2rem;border-radius:26px;background:var(--card);border:1px solid var(--bd);box-shadow:var(--sh);animation:rise .7s both}
 .box img{display:block;margin:0 auto .6rem;border-radius:14px;animation:float 4s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}
-.box h1{text-align:center;font-family:'Reem Kufi',serif;font-size:2rem;color:var(--au)}
+.box h1{text-align:center;font-weight:800;font-size:2rem;color:var(--au)}
 .tabs{display:flex;gap:.5rem;margin:1rem 0}.tabs button{flex:1}
 .themeTop{position:absolute;top:1rem;left:1rem;z-index:2;font-size:.85rem}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 #app{display:flex;min-height:100vh}
 nav{width:260px;padding:1rem;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:.15rem;background:var(--bg2);border-left:1px solid var(--bd);transition:transform .3s}
-.brand{display:flex;gap:.6rem;align-items:center;font-family:'Reem Kufi',serif;font-size:1.6rem;color:var(--au);margin-bottom:.8rem}.brand img{width:40px;border-radius:10px}
+.brand{display:flex;gap:.6rem;align-items:center;font-weight:800;font-size:1.6rem;color:var(--au);margin-bottom:.8rem}.brand img{width:40px;border-radius:10px}
 nav .grp{font-size:.78rem;color:var(--mu);margin:.8rem .4rem .2rem;font-weight:600}
 nav button{display:flex;align-items:center;gap:.7rem;width:100%;background:transparent;text-align:right;color:var(--mu);box-shadow:none;font-weight:600;padding:.5rem .8rem}
 nav button:hover:not(:disabled){background:var(--card);transform:none;box-shadow:none;color:var(--tx)}
@@ -95,7 +95,7 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 .quran{font-family:var(--qfam,'Amiri Quran'),'Amiri Quran',serif;line-height:2.5;text-align:justify;font-size:var(--qf,30px);word-spacing:.08em}
 .quran span{cursor:pointer;border-radius:8px;transition:background .25s}.quran span:hover,.quran span.sel{background:rgba(236,188,88,.24)}
 .quran span.playing{background:rgba(63,193,176,.3)}
-.quran .n{display:inline-grid;place-items:center;width:1.9em;height:1.9em;margin:0 .2em;border:1.5px solid var(--au);border-radius:50%;font:600 .42em 'Cairo',sans-serif;font-style:normal;color:var(--au);vertical-align:middle}
+.quran .n{display:inline-grid;place-items:center;width:1.9em;height:1.9em;margin:0 .2em;border:1.5px solid var(--au);border-radius:50%;font:600 .42em 'Tajawal',sans-serif;font-style:normal;color:var(--au);vertical-align:middle}
 .skl{height:1.3rem;border-radius:8px;margin:1rem 0;background:linear-gradient(90deg,var(--card),var(--bd),var(--card));background-size:200%;animation:sh 1.2s infinite}
 @keyframes sh{to{background-position:-200% 0}}
 #abar{position:fixed;bottom:1rem;left:50%;transform:translate(-50%,200px);display:flex;gap:.4rem;padding:.6rem;background:var(--bg2);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);transition:transform .35s;z-index:40;flex-wrap:wrap;justify-content:center;width:max-content;max-width:96vw}
@@ -112,7 +112,7 @@ main{flex:1;padding:1.5rem;max-width:1000px;margin:auto;width:100%;min-width:0}
 #adMod .box{text-align:center}#adMod h2{color:var(--au)}
 #bnav,#ov{display:none}
 @media(max-width:800px){
- body{font-size:15px}h2{font-size:1.4rem}
+ body{font-size:16px}h2{font-size:1.4rem}
  nav{position:fixed;right:0;top:0;z-index:70;transform:translateX(110%);box-shadow:var(--sh);width:min(280px,85vw)}nav.open{transform:none}
  #ov.on{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:65}
  #bnav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--bg2);border-top:1px solid var(--bd);padding:.3rem .2rem calc(.3rem + env(safe-area-inset-bottom))}
@@ -591,10 +591,10 @@ $('aImg').onclick=async()=>{
     x.strokeStyle='#ecbc58';x.lineWidth=4;x.strokeRect(36,36,W-72,H-72);x.lineWidth=1.5;x.strokeRect(52,52,W-104,H-104);
     try{const im=new Image();im.src='icon-180.png';await im.decode();x.drawImage(im,W/2-45,90,90,90)}catch(e){}
     x.direction='rtl';x.textAlign='center';x.textBaseline='middle';
-    x.fillStyle='#ecbc58';x.font="600 34px 'Cairo',sans-serif";x.fillText('سَكينة',W/2,215);
+    x.fillStyle='#ecbc58';x.font="600 34px 'Tajawal',sans-serif";x.fillText('سَكينة',W/2,215);
     x.fillStyle='#ffffff';x.font=`${FS}px 'Amiri Quran'`;
     const y0=(H-lines.length*LH)/2+LH/2+30;lines.forEach((l,i)=>x.fillText(l,W/2,y0+i*LH));
-    x.fillStyle='#ecbc58';x.font="600 36px 'Cairo',sans-serif";x.fillText(`سورة ${NM[curN-1]} — آية ${ar(selA)}`,W/2,H-120);
+    x.fillStyle='#ecbc58';x.font="600 36px 'Tajawal',sans-serif";x.fillText(`سورة ${NM[curN-1]} — آية ${ar(selA)}`,W/2,H-120);
     const blob=await new Promise(r=>c.toBlob(r,'image/png'));
     const file=new File([blob],`sakina-${curN}-${selA}.png`,{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file]}).catch(()=>{})}
@@ -899,12 +899,9 @@ const H={ptrack:loadPT,tasbih:loadTS,qibla:drawQ};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b&&H[b.dataset.p])setTimeout(H[b.dataset.p],0)});
 </script>
 <script type="module">
-/* SAKINA Audio: قارئ الأذكار والأحاديث
-   الأذكار: تسجيل المصدر (حقل audio في بيانات حصن المسلم) إن وُجد، وإلا قراءة بصوت الجهاز العربي.
-   الأحاديث: قراءة بصوت الجهاز العربي (لا توجد تسجيلات مؤكدة لها). */
+/* SAKINA Audio: قارئ الأذكار والأحاديث (تسجيلات فقط، بدون صوت الجهاز) */
 const $=id=>document.getElementById(id);
 function toast(m,err){const t=$('toast');if(!t)return;t.textContent=m;t.className='show'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',3500)}
-
 const st=document.createElement('style');st.textContent=`
 #aud{position:fixed;left:50%;bottom:1rem;transform:translate(-50%,220px);z-index:55;width:min(560px,96vw);padding:.7rem;border-radius:18px;background:var(--bg2);border:1px solid var(--bd);box-shadow:var(--sh);transition:transform .35s}
 #aud.on{transform:translate(-50%,0)}
@@ -912,65 +909,49 @@ const st=document.createElement('style');st.textContent=`
 #aud .row{gap:.4rem}#aud select{width:auto;margin:0;padding:.35rem .6rem;padding-left:2rem}#aud input[type=range]{width:90px;margin:0}
 .aplay{outline:2px solid var(--pri);background:rgba(63,193,176,.12)!important}
 @media(max-width:800px){#aud{bottom:4.8rem}}`;document.head.appendChild(st);
-
 const bar=document.createElement('div');bar.id='aud';
 bar.innerHTML=`<div id="audT"></div><div class="row"><button id="audP" class="alt">إيقاف مؤقت</button><button id="audS" class="del">إيقاف</button>
 <select id="audR" aria-label="السرعة"><option value="0.75">بطيء</option><option value="1" selected>عادي</option><option value="1.25">أسرع</option><option value="1.5">سريع</option></select>
-<select class="sM" aria-label="المصدر"></select><select class="sV hide" aria-label="الصوت"></select><input id="audL" type="range" min="0" max="1" step=".05" value="1" aria-label="مستوى الصوت"></div>`;
+<input id="audL" type="range" min="0" max="1" step=".05" value="1" aria-label="مستوى الصوت"></div>`;
 document.body.appendChild(bar);
 
-/* ---------- بيانات صوت الأذكار ---------- */
-const BASE='https://cdn.jsdelivr.net/gh/rn0x/Adhkar-json@main/';
+/* ---------- الأذكار: تسجيلات حمد الدريهم (حصن المسلم) من مستودع rn0x/Adhkar-json ---------- */
+const B1='https://cdn.jsdelivr.net/gh/rn0x/Adhkar-json@main/',B2='https://raw.githubusercontent.com/rn0x/Adhkar-json/main/';
 let AU=null;
 async function loadAU(){
   if(AU)return AU;AU={};
-  for(const u of [BASE+'adhkar.json','https://raw.githubusercontent.com/rn0x/Adhkar-json/main/adhkar.json']){
+  for(const u of [B1+'adhkar.json',B2+'adhkar.json']){
     try{const r=await fetch(u);if(!r.ok)continue;const j=await r.json();
       (Array.isArray(j)?j:Object.values(j)).forEach(c=>{const t=c.category||c.title||c.name||'',
-        a=(c.array||c.items||c.content||[]).filter(i=>i.text||i.content||i.zekr).map(i=>i.audio||i.sound||'');
-        if(t&&a.length)AU[t]=a});break}catch(e){}}
+        a=(c.array||c.items||c.content||[]).filter(i=>i.text||i.content||i.zekr).map(i=>i.audio||'');
+        if(t&&a.length)AU[t]=a});if(Object.keys(AU).length)break}catch(e){}}
   return AU}
-const absUrl=p=>!p?'':/^https?:/.test(p)?p:BASE+String(p).replace(/^\/+/,'');
+const azUrls=p=>{if(!p)return [];const r=String(p).replace(/^\/+/,'');return /^https?:/.test(p)?[p]:[B1+r,B2+r]};
+/* ---------- الأحاديث: ملفات الأربعين النووية لكل حديث (شبكة الشفاء) ---------- */
+const hdUrls=n=>n?[`https://www.ashefaa.com/7adith/nawawi${String(n).padStart(2,'0')}.mp3`]:[];
 
 /* ---------- المشغّل ---------- */
-const A=new Audio();let Q=[],qi=-1,tok=0,tts=false,rate=1,vol=1,vname='',noted=false,srcMode='rec';try{srcMode=localStorage.getItem('sk_asrc')||'rec';vname=localStorage.getItem('sk_avoice')||''}catch(e){}
+const A=new Audio();let Q=[],qi=-1,tok=0,rate=1,vol=1;
 const mark=el=>{document.querySelectorAll('.aplay').forEach(x=>x.classList.remove('aplay'));el&&el.classList.add('aplay')};
-function stop(){tok++;A.pause();speechSynthesis.cancel();Q=[];qi=-1;mark(null);bar.classList.remove('on');$('audP').textContent='إيقاف مؤقت'}
-const voices=()=>speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang));
-const voice=()=>{const v=voices();return v.find(x=>x.name===vname)||v[0]};
-function chunk(t){const w=t.split(/\s+/),o=[];let c='';for(const x of w){if((c+' '+x).length>150&&c){o.push(c);c=x}else c=c?c+' '+x:x}if(c)o.push(c);return o}
-function speak(it,t,done){
-  tts=true;const v=voice();
-  if(!v){toast('جهازك أو متصفحك لا يحتوي صوتًا عربيًا للقراءة',1);stop();return}
-  const ch=chunk(it.text);let k=0;
-  const one=()=>{if(t!==tok)return;if(k>=ch.length)return done();
-    const u=new SpeechSynthesisUtterance(ch[k++]);u.voice=v;u.lang=v.lang;u.rate=rate;u.volume=vol;u.onend=one;
-    u.onerror=e=>{if(t===tok&&e.error!=='canceled'&&e.error!=='interrupted'){toast('تعذّرت القراءة',1);stop()}};
-    speechSynthesis.speak(u)};
-  one()}
+function stop(){tok++;A.pause();A.onended=A.onerror=null;Q=[];qi=-1;mark(null);bar.classList.remove('on');$('audP').textContent='إيقاف مؤقت'}
 function run(){
   if(qi>=Q.length)return stop();
   const it=Q[qi],t=++tok;mark(it.el);it.el.scrollIntoView({block:'center',behavior:'smooth'});
   bar.classList.add('on');$('audT').textContent=it.text.slice(0,70)+(it.text.length>70?'…':'');$('audP').textContent='إيقاف مؤقت';
-  const done=()=>{if(t!==tok)return;qi++;run()};
-  const bad=()=>{if(t!==tok)return;it.bad=1;if(!noted){noted=true;toast('لا يوجد تسجيل صوتي لهذا الذكر، تتم القراءة بصوت الجهاز')}run()};
-  if(srcMode==='rec'&&it.audio&&!it.bad){tts=false;A.src=it.audio;A.playbackRate=rate;A.volume=vol;A.onended=done;A.onerror=bad;A.play().catch(bad);return}
-  speak(it,t,done)}
+  const done=()=>{if(t!==tok)return;qi++;run()};let k=0;
+  const next=()=>{if(t!==tok)return;
+    if(k>=it.urls.length){toast('لا يوجد تسجيل صوتي متاح لهذا النص، سننتقل للتالي',1);return done()}
+    A.onended=done;A.onerror=next;A.src=it.urls[k++];A.playbackRate=rate;A.volume=vol;A.play().catch(()=>{})};
+  next()}
 function playList(items,i){stop();Q=items;qi=i;run()}
 $('audS').onclick=stop;
-$('audP').onclick=()=>{
-  if(tts){if(speechSynthesis.paused){speechSynthesis.resume();$('audP').textContent='إيقاف مؤقت'}else{speechSynthesis.pause();$('audP').textContent='استكمال'}}
-  else if(A.paused){A.play();$('audP').textContent='إيقاف مؤقت'}else{A.pause();$('audP').textContent='استكمال'}};
+$('audP').onclick=()=>{if(A.paused){A.play();$('audP').textContent='إيقاف مؤقت'}else{A.pause();$('audP').textContent='استكمال'}};
 $('audR').onchange=e=>{rate=+e.target.value;A.playbackRate=rate};
 $('audL').oninput=e=>{vol=+e.target.value;A.volume=vol};
-document.addEventListener('change',e=>{if(e.target.classList.contains('sM')){srcMode=e.target.value;try{localStorage.setItem('sk_asrc',srcMode)}catch(x){}fillVoices()}else if(e.target.classList.contains('sV')){vname=e.target.value;try{localStorage.setItem('sk_avoice',vname)}catch(x){}fillVoices()}});
-function fillVoices(){const v=voices();document.querySelectorAll('.sM').forEach(s=>{s.innerHTML='<option value="rec">تسجيل المصدر (إن وُجد)</option><option value="dev">صوت الجهاز العربي</option>';s.value=srcMode});
-  document.querySelectorAll('.sV').forEach(s=>{s.classList.toggle('hide',srcMode!=='dev'||v.length<1);s.innerHTML=v.map(x=>`<option value="${x.name}">${x.name}</option>`).join('');if(vname)s.value=vname})}
-fillVoices();if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=fillVoices;
 addEventListener('pagehide',stop);
 document.addEventListener('click',e=>{if(e.target.closest('[data-p]'))stop()});
 
-/* ---------- إضافة الأزرار للصفحات ---------- */
+/* ---------- الأزرار ---------- */
 const items=box=>[...box.querySelectorAll('.card')].filter(c=>c.querySelector('.atxt')).map(c=>c._it).filter(Boolean);
 async function decorate(box,kind){
   const cards=[...box.querySelectorAll('.card')].filter(c=>c.querySelector('.atxt'));
@@ -979,15 +960,16 @@ async function decorate(box,kind){
   if(kind==='az'){const t=box.querySelector('h3')?.textContent||'';au=(await loadAU())[t]||[]}
   cards.forEach((c,k)=>{
     if(c.querySelector('[data-au]'))return;
-    c._it={text:c.querySelector('.atxt').textContent.trim(),audio:absUrl(au[k]),el:c};
+    const urls=kind==='az'?azUrls(au[k]):hdUrls(+c.querySelector('[data-hc]')?.dataset.hc);
+    c._it={text:c.querySelector('.atxt').textContent.trim(),urls,el:c};
     const b=document.createElement('button');b.dataset.au=1;b.textContent='استماع';
     b.onclick=()=>{const l=items(box);playList(l,l.indexOf(c._it))};
     (c.querySelector('.row')||c).appendChild(b)});
   if(!box.querySelector('.auAll')){
     const a=document.createElement('div');a.className='row auAll';a.style.margin='0 0 1rem';
-    a.innerHTML='<button class="gold">تشغيل الكل بالترتيب</button><select class="sM" aria-label="المصدر" style="width:auto;margin:0"></select><select class="sV hide" aria-label="الصوت" style="width:auto;margin:0"></select>';
+    a.innerHTML=`<button class="gold">تشغيل الكل بالترتيب</button><span class="mu">${kind==='az'?'الصوت: حمد الدريهم (حصن المسلم)':'الصوت: تسجيلات الأربعين النووية من شبكة الشفاء'}</span>`;
     a.firstChild.onclick=()=>playList(items(box),0);
-    const h=box.querySelector('h3');h?h.after(a):box.prepend(a);fillVoices()}}
+    const h=box.querySelector('h3');h?h.after(a):box.prepend(a)}}
 [['azBox','az'],['hdBox','hd']].forEach(([id,k])=>{const box=$(id);if(box)new MutationObserver(()=>decorate(box,k)).observe(box,{childList:true})});
 </script>
 <script type="module">
@@ -1003,27 +985,18 @@ function toast(m,err){const t=$('toast');if(!t)return;t.textContent=m;t.classNam
 const ic=d=>`<svg class="ic" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
 
 /* ---------- خطوط ---------- */
-const lk=document.createElement('link');lk.rel='stylesheet';
-lk.href='https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Almarai:wght@400;700&family=El+Messiri:wght@400;700&family=Lateef&display=swap';document.head.appendChild(lk);
 const st=document.createElement('style');st.textContent=`
-html[data-uf] body,html[data-uf] button,html[data-uf] input,html[data-uf] select,html[data-uf] textarea,html[data-uf] .mu,html[data-uf] .help,html[data-uf] .atxt,html[data-uf] .big,html[data-uf] h2,html[data-uf] h3{font-family:var(--uf),Tahoma,sans-serif!important}
-html[data-uf] nav,html[data-uf] nav button,html[data-uf] #bnav button,html[data-uf] button,html[data-uf] select,html[data-uf] input,html[data-uf] textarea{font-family:'Cairo',Tahoma,Arial,sans-serif!important}
 .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--au);display:block;margin:0 0 .6rem;background:var(--card)}
 #tfBox .tx{white-space:pre-wrap;font-size:1.1rem;line-height:2.1}
 .sch{width:100%;border-collapse:collapse}.sch th,.sch td{padding:.35rem;border-bottom:1px solid var(--bd);text-align:right}
 .sch input{margin:0;min-width:110px}.sch tr.td{background:rgba(236,188,88,.16)}.schW{overflow-x:auto}`;document.head.appendChild(st);
-const FONTS=[['Reem Kufi','خط سَكينة (ريم كوفي)'],['Cairo','القاهرة'],['Tajawal','تجوال'],['Almarai','المراعي'],['El Messiri','المسيري'],['Noto Naskh Arabic','نسخ'],['Lateef','لطيف']];
-function setFont(f){document.documentElement.dataset.uf=1;document.documentElement.style.setProperty('--uf',`'${f}'`);try{localStorage.setItem('sk_uf',f)}catch(e){}}
-let uf='Reem Kufi';try{uf=localStorage.getItem('sk_uf')||uf}catch(e){}setFont(uf);
-
 /* ---------- الإعدادات: خط + صورة ---------- */
 const sset=$('settings');
 const card=document.createElement('div');card.className='card';
 card.innerHTML=`<h3>الصورة الشخصية</h3><img id="avImg" class="avatar" alt="" src="icon-48.png"><input id="avIn" type="file" accept="image/*">
 <div class="row"><button id="avSave">حفظ الصورة</button><button id="avDel" class="alt">حذف الصورة</button></div>
-<h3 style="margin-top:1.2rem">خط الموقع</h3><select id="ufSel">${FONTS.map(f=>`<option value="${f[0]}">${f[1]}</option>`).join('')}</select>
-<p class="mu">يُطبَّق على كل نصوص الموقع ما عدا المصحف.</p>`;
-sset.appendChild(card);$('ufSel').value=uf;$('ufSel').onchange=e=>setFont(e.target.value);
+`;
+sset.appendChild(card);
 let newPhoto='';
 $('avIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image(),u=URL.createObjectURL(f);
   im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),s=Math.min(im.width,im.height);
