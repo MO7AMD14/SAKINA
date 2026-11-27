@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sakina-ashy.vercel.app/sitemap.xml
