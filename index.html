@@ -193,12 +193,22 @@ main{padding-top:3.6rem!important}
 .recC{width:170px;height:170px;border-radius:50%;padding:8px;background:var(--bg2);border:3px solid var(--pri);box-shadow:0 0 30px 4px rgba(63,193,176,.25);transition:box-shadow .3s}
 .recC img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .recC.talk{animation:recGlow .9s ease-in-out infinite}
-@keyframes recGlow{0%,100%{transform:scale(1);box-shadow:0 0 50px 12px rgba(63,193,176,.55),0 0 110px 40px rgba(42,80,200,.35)}50%{transform:scale(1.08);box-shadow:0 0 90px 36px rgba(63,193,176,.85),0 0 170px 80px rgba(236,188,88,.45)}}
+@keyframes recGlow{0%,100%{transform:scale(1);box-shadow:0 0 60px 16px rgba(63,193,176,.65),0 0 130px 50px rgba(42,80,200,.45)}50%{transform:scale(1.12);box-shadow:0 0 110px 46px rgba(63,193,176,.95),0 0 200px 100px rgba(236,188,88,.5)}}
 .recTx{max-width:min(720px,92vw);min-height:4rem;text-align:center;font-size:1.6rem;line-height:2}
 #authV{align-content:center;gap:1.5rem;padding:1.5rem 1rem 3rem}
 .pubInfo{width:min(820px,100%);position:relative;line-height:2}
 .pubInfo h2{color:var(--au);font-size:1.5rem}.pubInfo h3{margin-top:1.2rem}
 .pubInfo ul{padding-inline-start:1.2rem}.pubInfo details{border-bottom:1px solid var(--bd);padding:.5rem 0}.pubInfo summary{cursor:pointer;font-weight:700}
+#recBot{position:fixed;left:0;right:0;bottom:0;height:110px;pointer-events:none;background:radial-gradient(ellipse at 50% 100%,rgba(63,193,176,.9),rgba(42,80,200,.45) 45%,transparent 72%);opacity:.2;transition:opacity .3s}
+#recOv.talking #recBot{opacity:1;animation:botPulse .8s ease-in-out infinite}
+@keyframes botPulse{50%{opacity:.6;height:150px}}
+#recPg{display:none}
+#recOv.live{justify-content:flex-start;padding-top:.8rem;gap:.7rem}
+#recOv.live .recC{width:92px;height:92px;flex:none}
+#recOv.live #recPg{display:block;flex:1;min-height:0;overflow:auto;width:min(860px,100%);padding:.4rem 1rem 6.5rem;text-align:justify}
+#recOv.live .recTx{font-size:1.1rem;min-height:2.4rem}
+#recPg span.w{color:transparent;cursor:default;background:none!important;transition:color .25s}
+#recPg span.w.on{color:var(--tx)}#recPg span.w.fix{color:var(--au)}#recPg span.w.bad{color:var(--er);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -1218,12 +1228,13 @@ async function getSurah(n){
   const j=await (await fetch(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`)).json();const a=j.data.ayahs.map(x=>x.text);
   if(n!==1&&n!==9){const w=a[0].split(' ');if(w.length>4&&plainAr(w.slice(0,4).join(' '))==='بسم الله الرحمن الرحيم')a[0]=w.slice(4).join(' ')}
   return a}
-const PH={'ث':'س','ذ':'ز','ظ':'ز','ض':'د','ص':'س','ط':'ت','ق':'ك','ء':'','ؤ':'و','ئ':'ي'};
-const phon=w=>w.replace(/[ثذظضصطقءؤئ]/g,c=>PH[c]);
+const PH={'ث':'س','ذ':'ز','ظ':'ز','ض':'د','ص':'س','ط':'ت','ق':'ك','ء':'','ؤ':'و','ئ':'ي','ن':'م','ح':'ه','ع':'ا','غ':'خ'};
+const phon=w=>w.replace(/[ثذظضصطقءؤئنحعغ]/g,c=>PH[c]);
 const LN={'الف':'ا','لام':'ل','ميم':'م','صاد':'ص','را':'ر','راء':'ر','كاف':'ك','ها':'ه','يا':'ي','ياء':'ي','عين':'ع','طا':'ط','طاء':'ط','سين':'س','حا':'ح','حاء':'ح','حاميم':'حم','قاف':'ق','نون':'ن','ياسين':'يس','طاسين':'طس'};
 const MQ=/^[املصركهيعطسحقن]+$/;
 const lev=(a,b)=>{const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]};
-const near=(a,b)=>{if(a===b)return true;const m=Math.max(a.length,b.length);return m>=3&&lev(a,b)<=Math.floor(m/3)};
+const skel=w=>w.replace(/[اوي]/g,'');
+const near=(a,b)=>{if(a===b)return true;const m=Math.max(a.length,b.length);if(m>=3&&lev(a,b)<=Math.round(m*.4))return true;const x=skel(a);return x.length>=2&&x===skel(b)};
 const merge=a0=>{const o=[];let b='';for(const x of a0){if(LN[x])b+=LN[x];else{if(b){o.push(b);b=''}o.push(x)}}if(b)o.push(b);return o};
 function score(typed,exp){
   const e0=plainAr(exp).split(' ').filter(Boolean),mq=e0.every(x=>MQ.test(x))&&e0.join('').length<=8;
@@ -1246,15 +1257,15 @@ function pick(ay,from,to,cnt){
 
 /* ---- شاشة التسجيل الصوتي (دائرة سَكينة) ---- */
 const ro=document.createElement('div');ro.id='recOv';ro.className='hide';
-ro.innerHTML=`<div class="recC" id="recC"><img src="icon-180.png" alt=""></div><div class="recTx" id="recTx"></div><div class="row" style="justify-content:center"><button id="recResume" class="gold hide">تابع من هنا</button><button id="recStop">إيقاف وتحقق</button><button id="recCancel" class="alt">إغلاق</button></div>`;
+ro.innerHTML=`<div class="recC" id="recC"><img src="icon-180.png" alt=""></div><div class="recTx" id="recTx"></div><div id="recPg" class="quran"></div><div class="row" style="justify-content:center;position:relative;z-index:2"><button id="recResume" class="gold hide">تابع من هنا</button><button id="recStop">إيقاف وتحقق</button><button id="recCancel" class="alt">إغلاق</button></div><div id="recBot"></div>`;
 document.body.appendChild(ro);
-let acc='',rcur='',recStop=false,recCancel=false,recT=null,L={};
-const talk=()=>{$('recC').classList.add('talk');clearTimeout(recT);recT=setTimeout(()=>$('recC').classList.remove('talk'),900)};
-const recClose=()=>{ro.classList.add('hide');$('recC').classList.remove('talk');$('recResume').classList.add('hide');$('recStop').classList.remove('hide')};
+let acc='',rcur='',ralts=[],recStop=false,recCancel=false,recT=null,L={};
+const talk=()=>{$('recC').classList.add('talk');ro.classList.add('talking');clearTimeout(recT);recT=setTimeout(()=>{$('recC').classList.remove('talk');ro.classList.remove('talking')},1400)};
+const recClose=()=>{ro.classList.add('hide');ro.classList.remove('live','talking');$('recC').classList.remove('talk');$('recResume').classList.add('hide');$('recStop').classList.remove('hide')};
 function beep(){try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.frequency.value=220;o.type='square';g.gain.value=.15;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.35)}catch(e){}try{navigator.vibrate&&navigator.vibrate([150,60,150])}catch(e){}}
 function startRec(){rec=new SR();rec.lang='ar-SA';rec.interimResults=true;rec.continuous=false;
-  rec.onspeechstart=talk;
-  rec.onresult=e=>{rcur=(acc+' '+[...e.results].map(r=>r[0].transcript).join(' ')).trim();talk();if(L.onText)L.onText(rcur,e.results[e.results.length-1].isFinal);else $('recTx').textContent=rcur};
+  rec.maxAlternatives=5;rec.onspeechstart=talk;rec.onsoundstart=talk;rec.onaudiostart=talk;
+  rec.onresult=e=>{const R=[...e.results];ralts=[0,1,2,3,4].map(j=>(acc+' '+R.map(r=>(r[j]||r[0]).transcript).join(' ')).trim());rcur=ralts[0];talk();if(L.onText)L.onText(ralts,R[R.length-1].isFinal);else $('recTx').textContent=rcur};
   rec.onerror=ev=>{if(ev.error==='no-speech'||ev.error==='aborted')return;recStop=true;toast('تعذّر التسجيل، تأكد من إذن الميكروفون',1)};
   rec.onend=()=>{rec=null;if(!recStop&&!recCancel&&!(L.keep&&L.keep())){acc=rcur;try{startRec();return}catch(e){}}
     if(L.keep&&L.keep())return;recClose();if(recCancel)return;L.onEnd&&L.onEnd(rcur)};
@@ -1310,33 +1321,43 @@ function surahAns(sc){const it=Q.items[Q.i];finishQ(sc,`<div class="big">${sc?'�
 $('htShow').onclick=()=>{if(!Q||Q.done)return;const it=Q.items[Q.i];if(Q.type==='surah')surahAns(0);else finishQ(0,`<div class="mu">الإجابة:</div><div class="qtxt">${esc(it.pre+' '+it.rest)}</div>`)};
 $('htRec').onclick=()=>{if(!SR||!Q||Q.done)return;const it=Q.items[Q.i];
   listen({onEnd:txt=>{if(!txt.trim())return toast('لم أسمع شيئًا، حاول مرة أخرى',1);
-    if(Q.type==='complete'){const p=Math.round(score(txt,it.rest)*100);finishQ(p/100,`<div class="big">${ar(p)}٪ — ${p>=75?'صحيح':'يحتاج مراجعة'}</div><div class="qtxt">${esc(it.pre+' '+it.rest)}</div>`)}
-    else surahAns(score(txt.replace(/^\s*سورة\s+/,''),it.name)>=.7?1:0)}})};
+    if(Q.type==='complete'){const p=Math.round(Math.max(...ralts.map(t=>score(t,it.rest)))*100);finishQ(p/100,`<div class="big">${ar(p)}٪ — ${p>=75?'صحيح':'يحتاج مراجعة'}</div><div class="qtxt">${esc(it.pre+' '+it.rest)}</div>`)}
+    else surahAns(Math.max(...ralts.map(t=>score(t.replace(/^\s*سورة\s+/,''),it.name)))>=.7?1:0)}})};
 $('htNext').onclick=()=>{if(Q.i<Q.items.length-1){Q.i++;showQ();return}
   const p=Math.round(Q.sc.reduce((a,b)=>a+b,0)/Q.sc.length*100);summary(p,`متوسط النتيجة في ${ar(Q.sc.length)} أسئلة`,{s:Q.n,f:Q.f,t:Q.t})};
 
-/* ---- المراجعة المباشرة: يوقفك عند الخطأ ---- */
-function startLive(ay,n,f,t){const D=[],E=[],A=[];
-  for(let i=f;i<=t;i++)wrd(ay[i-1]).forEach(w=>{D.push(w);E.push(phon(plainAr(w)));A.push(i)});
-  LV={D,E,A,n,f,t,base:0,ok:0,k:-1,err:null};$('htDone').classList.add('hide');
+/* ---- المراجعة المباشرة: صفحة مخفية + يوقفك عند الخطأ ---- */
+function startLive(ay,n,f,t){const D=[],E=[],A=[];let h='';
+  for(let i=f;i<=t;i++){wrd(ay[i-1]).forEach(x=>{h+=`<span class="w">${esc(x)}</span> `;D.push(x);E.push(phon(plainAr(x)));A.push(i)});h+=`<i class="n">${ar(i)}</i> `}
+  LV={D,E,A,n,f,t,base:0,tot:0,sk:0,k:-1,kc:0,err:null};
+  $('recPg').innerHTML=h;LV.W=[...$('recPg').querySelectorAll('.w')];ro.classList.add('live');$('htDone').classList.add('hide');
   listen({hint:'ابدأ القراءة من أول النطاق…',live:true,keep:()=>LV.err!=null,onText:liveText,onEnd:liveEnd})}
-function liveText(txt,final){const V=LV;let r=plainAr(txt.replace(/^\s*سورة\s+/,'')).split(' ').filter(Boolean);
+function evalAlt(txt){const V=LV;let r=plainAr(txt.replace(/^\s*سورة\s+/,'')).split(' ').filter(Boolean);
   if(V.base===0&&MQ.test(plainAr(V.D[0]||'')))r=merge(r);
-  const sh=r.slice(),p=r.map(phon);let k=0;
-  for(;k<p.length;k++){const g=V.base+k;if(g>=V.E.length)break;
-    if(!near(p[k],V.E[g])){if(k<p.length-1||final){if(V.k===g||final)return liveErr(g,sh[k]);V.k=g}break}}
-  if(k===p.length||V.base+k>=V.E.length)V.k=-1;
-  V.ok=Math.max(V.ok,V.base+k);
-  const from=Math.max(0,V.base+k-14);$('recTx').innerHTML=`<span style="color:var(--pri)">${esc(V.D.slice(from,V.base+k).join(' '))}</span>`;
-  if(V.base+k>=V.E.length&&!V.err){recStop=true;if(rec)rec.stop()}}
-function liveErr(g,said){const V=LV;V.err=g;recStop=true;try{rec&&rec.abort()}catch(e){}beep();
-  $('recC').classList.remove('talk');
-  $('recTx').innerHTML=`<div style="color:var(--er);font-size:1.3rem">توقّف! قلت «${esc(said)}»</div><div style="margin-top:.6rem">الصواب: <b style="color:var(--au)">${esc(V.D[g])}</b> ${esc(V.D.slice(g+1,g+4).join(' '))}</div><div class="mu">آية ${ar(V.A[g])}</div>`;
+  const sh=r.slice(),p=r.map(phon);let g=V.base,miss=-1;
+  for(let i=0;i<p.length&&g<V.E.length;i++){
+    if(near(p[i],V.E[g])){g++;continue}
+    if(V.E[g].length<=3&&g+1<V.E.length&&near(p[i],V.E[g+1])){g+=2;continue}
+    miss=i;break}
+  return {g,miss,said:sh[miss],n:p.length}}
+function liveText(alts,final){const V=LV,ev=alts.map(evalAlt);
+  const b=ev.reduce((a,x)=>(x.g>a.g||(x.g===a.g&&x.miss<0&&a.miss>=0))?x:a,ev[0]),g=b.g;
+  V.sk=g-V.base;$('recTx').textContent='';
+  V.W.forEach((w,i)=>w.classList.toggle('on',i>=V.base&&i<g));
+  if(g>V.base){const c=V.W[Math.min(g,V.W.length-1)];if(c)c.scrollIntoView({block:'center',behavior:'smooth'})}
+  if(b.miss<0){V.k=-1;V.kc=0;if(g>=V.E.length){recStop=true;if(rec)rec.stop()}return}
+  if(b.miss<b.n-1){if(V.k===g)V.kc++;else{V.k=g;V.kc=1}if(V.kc>=2||final)liveErr(g,b.said)}}
+function liveErr(g,said){const V=LV;V.err=g;V.tot+=V.sk;V.sk=0;recStop=true;try{rec&&rec.abort()}catch(e){}beep();
+  $('recC').classList.remove('talk');ro.classList.remove('talking');const a=V.A[g];
+  V.W.forEach((w,i)=>{if(i===g)w.classList.add('bad');if(i>=g&&V.A[i]===a)w.classList.add('fix')});
+  $('recTx').innerHTML=`<div style="color:var(--er);font-size:1.2rem">توقّف! قلت «${esc(said||'')}» والصواب «<b style="color:var(--au)">${esc(V.D[g])}</b>»</div><div class="mu">آية ${ar(a)}</div>`;
   $('recResume').classList.remove('hide');$('recStop').classList.add('hide')}
-$('recResume').onclick=()=>{const V=LV;V.base=V.err;V.err=null;V.k=-1;V.ok=Math.max(V.ok,V.base);$('recResume').classList.add('hide');$('recStop').classList.remove('hide');
-  acc='';rcur='';recStop=false;recCancel=false;$('recTx').textContent='أكمل من الكلمة: '+LV.D[V.base];try{startRec()}catch(e){recClose()}};
-function liveEnd(){const V=LV;if(!V)return;const p=Math.round(Math.min(V.ok,V.E.length)/V.E.length*100);
-  summary(p,`قرأت ${ar(Math.min(V.ok,V.E.length))} من ${ar(V.E.length)} كلمة بدون أخطاء`,{s:V.n,f:V.f,t:V.t})}
+$('recResume').onclick=()=>{const V=LV,a=V.A[V.err],nb=V.A.findIndex((x,i)=>i>V.err&&x>a);
+  V.err=null;V.k=-1;V.kc=0;$('recResume').classList.add('hide');$('recStop').classList.remove('hide');
+  if(nb<0){recClose();liveEnd();return}
+  V.base=nb;V.sk=0;acc='';rcur='';recStop=false;recCancel=false;$('recTx').textContent='تابع من الآية '+ar(V.A[nb]);V.W[nb].scrollIntoView({block:'center',behavior:'smooth'});try{startRec()}catch(e){recClose()}};
+function liveEnd(){const V=LV;if(!V)return;const got=V.tot+V.sk,p=Math.round(Math.min(got,V.E.length)/V.E.length*100);
+  summary(p,`قرأت ${ar(Math.min(got,V.E.length))} من ${ar(V.E.length)} كلمة بدون أخطاء`,{s:V.n,f:V.f,t:V.t})}
 $('recCancel').addEventListener('click',()=>{if(L.live&&LV&&LV.err!=null){LV.err=null;recClose();liveEnd()}});
 
 /* ---------- تذكير الصيام ---------- */
@@ -1389,6 +1410,26 @@ function drawSugg(){const h=new Date().getHours(),d=new Date().getDay(),S=[];
   S.push(['htest','اختبر حفظك'],['ptrack','سجّل صلواتك'],['tasbih','سبّح الآن'],['quran','تابع القراءة']);
   SG.innerHTML=`<h3>اقتراحات لك الآن</h3><div class="tiles" style="margin:0">${S.slice(0,6).map(x=>`<button data-p="${x[0]}">${ic(SGI[x[0]])}${x[1]}</button>`).join('')}</div>`}
 drawSugg();document.addEventListener('click',e=>{if(e.target.closest('[data-p="dash"]'))setTimeout(drawSugg,0)});
+
+/* ---------- السنن والأذكار بعد الصلاة ---------- */
+const SUN=[['الفجر','ركعتان','لا توجد','ركعتا الفجر آكد الرواتب: «خير من الدنيا وما فيها» (رواه مسلم).'],
+['الظهر','٤ ركعات','ركعتان','الراتبة المؤكدة أربع قبلها وركعتان بعدها.'],
+['العصر','٤ ركعات (غير مؤكدة)','لا توجد','يُستحب أربع قبل العصر، وليست من الرواتب المؤكدة.'],
+['المغرب','لا توجد','ركعتان',''],
+['العشاء','لا توجد','ركعتان','ثم الوتر بعدها، وأقله ركعة.'],
+['الجمعة','ما تيسّر','ركعتان أو أربع','تُصلّى بعد الجمعة ركعتان أو أربع.']];
+const ADH=[['أستغفر الله',3],['اللهم أنت السلام ومنك السلام، تباركت يا ذا الجلال والإكرام',1],['لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير. اللهم لا مانع لما أعطيت، ولا معطي لما منعت، ولا ينفع ذا الجد منك الجد',1],['سبحان الله',33],['الحمد لله',33],['الله أكبر',33],['تمام المائة: لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير',1],['آية الكرسي (سورة البقرة ٢٥٥)',1],['قراءة الإخلاص والفلق والناس (ثلاثًا بعد الفجر والمغرب، ومرة بعد باقي الصلوات)',1]];
+mk('sunan',`<h2>السنن والأذكار بعد الصلاة</h2>
+<p class="help">الرواتب المؤكدة اثنتا عشرة ركعة: أربع قبل الظهر وركعتان بعدها، وركعتان بعد المغرب، وركعتان بعد العشاء، وركعتان قبل الفجر (حديث أم حبيبة رضي الله عنها، رواه مسلم والترمذي).</p>
+<div class="grid">${SUN.map(x=>`<div class="card"><h3>${x[0]}</h3><div class="mu">قبل الفريضة</div><b>${x[1]}</b><div class="mu" style="margin-top:.5rem">بعد الفريضة</div><b>${x[2]}</b>${x[3]?`<p class="mu" style="margin:.6rem 0 0">${x[3]}</p>`:''}</div>`).join('')}</div>
+<h2 style="margin-top:1.4rem">الأذكار بعد السلام من الصلاة</h2>
+<p class="help">تُقال بعد التسليم من الفريضة. التسبيح والتحميد والتكبير ثلاثًا وثلاثين، وتمام المائة (رواه مسلم). اضغط الزر لتعدّ.</p>
+<div id="sunA">${ADH.map((a,i)=>`<div class="card"><div class="atxt">${a[0]}</div><button data-sc="${i}" data-max="${a[1]}" data-left="${a[1]}">${a[1]>1?'العدد: '+ar(a[1]):'اضغط عند الانتهاء'}</button></div>`).join('')}</div>`);
+$$('#sunA [data-sc]').forEach(b=>b.onclick=()=>{let l=+b.dataset.left;const m=+b.dataset.max;
+  if(l<=0){b.dataset.left=m;b.textContent=m>1?'العدد: '+ar(m):'اضغط عند الانتهاء';return}
+  l--;b.dataset.left=l;b.textContent=l>0?'المتبقي: '+ar(l):'تم — اضغط للإعادة'});
+{const b=document.createElement('button');b.dataset.p='sunan';b.innerHTML=ic('M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM8 12l3 3 5-6')+'السنن والأذكار بعد الصلاة';place(b,'العبادات');
+ $('tiles').insertAdjacentHTML('beforeend',`<button data-p="sunan">${ic('M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM8 12l3 3 5-6')}السنن والأذكار</button>`)}
 
 document.addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;if(b.dataset.p==='sched')setTimeout(loadSch,0);if(b.dataset.p==='dash')setTimeout(loadDash,0)});
 </script>
